@@ -1,6 +1,6 @@
 ﻿namespace Ex03.ConsoleUI
 {
-    public enum eActionChoice
+    public enum eServiceChoice
     {
         enterNewVehicle,
         showAllLicenseNumbers,

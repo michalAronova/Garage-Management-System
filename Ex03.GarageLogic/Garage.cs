@@ -12,6 +12,11 @@ namespace Ex03.GarageLogic
 
         public List<string> GetAllLicenseNumbers()
         {
+            //here need to choose if to filter by status
+        }
+
+        public List<string> GetAllLicenseNumbersByStatus(GarageVehicle.VehicleStatus i_RequestedStatusFilter)
+        {
 
         }
 
