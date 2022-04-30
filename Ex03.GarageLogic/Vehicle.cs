@@ -9,6 +9,7 @@ namespace Ex03.GarageLogic
         private float m_EnergyLeft;
         private readonly List<Tire> r_Tires;
         private Engine m_Engine;
+
         public override bool Equals(object obj)
         {
             return base.Equals(obj);

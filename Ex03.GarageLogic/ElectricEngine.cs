@@ -1,6 +1,6 @@
 ﻿namespace Ex03.GarageLogic
 {
-    public class ElectricEngine
+    public class ElectricEngine : Engine
     {
         
     }
