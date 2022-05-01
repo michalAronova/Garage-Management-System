@@ -7,7 +7,7 @@ namespace Ex03.ConsoleUI
 {
     public class GarageUserInterface
     {
-        private readonly string[] r_ServicesNames =
+        private readonly string[] r_ServicesNames = ///get from logic so its modular
             {
                 "Enter new vehicle to the garage",
                 "Show all license numbers in the garage",
@@ -16,6 +16,7 @@ namespace Ex03.ConsoleUI
                 "Show a vehicle's full details", "Exit the system"
             };
         private Garage m_Garage = new Garage();
+        private readonly VehicleCreator r_VehicleCreator = new VehicleCreator();
         public void StartSystem()
         {
             bool runSystem = true;
@@ -102,6 +103,12 @@ Please choose the number of the service you wish to perform:";
             return userServiceChoice;
         }
 
+        private T printAndGetChoice<T>(string[] i_Options, string i_RequiredChoice)
+        {
+            T choice;
+            return choice;
+        }
+
         private bool performService(eServiceChoice i_ServiceChoice)
         {
             bool runSystem = true;
@@ -138,9 +145,28 @@ Please choose the number of the service you wish to perform:";
 
         private void enterNewVehicle()
         {
-
+            Vehicle newVehicle = null;
+            ///ask what type vehicle from the enum and what type engine from the enum
+            /// createVehicle - UI
+            List<string> ownerDetails = getOwnerDetails();
+            GarageVehicle newGarageVehicle = new GarageVehicle(newVehicle, ownerDetails[0], ownerDetails[1]); //maybe not readable?
+            /// ask for owner details -> call for GarageVehicle constructor to create
+            /// enter to the garage - send the vehicle and its type
         }
 
+        private Vehicle createVehicle(VehicleCreator.eVehicleType i_VehicleType, VehicleCreator.eEngineType i_EngineType)
+        {
+            ///params...
+            ///
+            ///
+            /// here we call create vehicle - of vehicle creator
+        }
+
+        private List<string> getOwnerDetails()
+        {
+            //ask for owner name + owner phone, return as list
+            return null;
+        }
         private void printAllLicenseNumbers()
         {
             //here need to choose if to filter by status
