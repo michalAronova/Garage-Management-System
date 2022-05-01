@@ -1,6 +1,6 @@
 ﻿namespace Ex03.GarageLogic
 {
-    public class Truck
+    public class Truck : Vehicle
     {
         
     }

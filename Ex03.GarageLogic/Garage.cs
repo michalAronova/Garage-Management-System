@@ -4,6 +4,13 @@ namespace Ex03.GarageLogic
 {
     public class Garage
     {
+        private Dictionary<string, GarageVehicle> m_GarageVehicles = null;
+
+        public bool IsVehicleInGarage(string i_LicenseNumber)
+        {
+            return m_GarageVehicles.ContainsKey(i_LicenseNumber);
+        }
+
         public void EnterNewVehicle()
         {
             //how do we knows which vehicle we want to make a new one of?
@@ -16,7 +23,7 @@ namespace Ex03.GarageLogic
             return null;
         }
 
-        public List<string> GetAllLicenseNumbersByStatus(GarageVehicle.VehicleStatus i_RequestedStatusFilter)
+        public List<string> GetAllLicenseNumbersByStatus(GarageVehicle.eVehicleStatus i_RequestedStatusFilter)
         {
             return null;
         }
