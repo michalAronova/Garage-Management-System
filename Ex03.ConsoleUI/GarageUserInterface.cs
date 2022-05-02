@@ -7,6 +7,20 @@ namespace Ex03.ConsoleUI
 {
     public class GarageUserInterface
     {
+        private readonly string[] r_ServicesNames = ///get from logic so its modular
+            {
+                "Enter new vehicle to the garage",
+                "Show all license numbers in the garage",
+                "Change a vehicle's status", "Fill a vehicle's tires to maximum",
+                "Refuel a vehicle", "Charge a vehicle", 
+                "Show a vehicle's full details", "Exit the system"
+            };
+        private Garage m_Garage = new Garage();
+        private readonly VehicleCreator r_VehicleCreator = new VehicleCreator();
+        public void StartSystem()
+        {
+            bool runSystem = true;
+            eServiceChoice serviceChoice;
         public eServiceOption GetAndReturnService()
         {
             //try cache?
@@ -67,6 +81,13 @@ Please choose the number of the service you wish to perform:";
             return EditedString;
         }
 
+        private T printAndGetChoice<T>(string[] i_Options, string i_RequiredChoice)
+        {
+            T choice;
+            return choice;
+        }
+
+        private bool performService(eServiceChoice i_ServiceChoice)
         private eServiceOption getServiceChoice() //refactor?
         {
             eServiceOption userServiceChoice;
@@ -88,14 +109,37 @@ Please choose the number of the service you wish to perform:";
 
         private int getStatusChoice() //refactor?
         {
+            Vehicle newVehicle = null;
+            ///ask what type vehicle from the enum and what type engine from the enum
+            /// createVehicle - UI
+            List<string> ownerDetails = getOwnerDetails();
+            GarageVehicle newGarageVehicle = new GarageVehicle(newVehicle, ownerDetails[0], ownerDetails[1]); //maybe not readable?
+            /// ask for owner details -> call for GarageVehicle constructor to create
+            /// enter to the garage - send the vehicle and its type
+        }
             int choiceNumber;
 
+        private Vehicle createVehicle(VehicleCreator.eVehicleType i_VehicleType, VehicleCreator.eEngineType i_EngineType)
+        {
+            ///params...
+            ///
+            ///
+            /// here we call create vehicle - of vehicle creator
+        }
             while (!int.TryParse(Console.ReadLine(), out choiceNumber)) { } //exeption
             if (!Enum.IsDefined(typeof(eServiceOption), choiceNumber) && choiceNumber != 0)
             {
                 throw new ValueOutOfRangeException("status option invalid", Enum.GetValues(typeof(GarageVehicle.eVehicleStatus)).Length, 0);
             }
 
+        private List<string> getOwnerDetails()
+        {
+            //ask for owner name + owner phone, return as list
+            return null;
+        }
+        private void printAllLicenseNumbers()
+        {
+            //here need to choose if to filter by status
             return choiceNumber;
         }
 
