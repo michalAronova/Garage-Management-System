@@ -59,17 +59,17 @@ namespace Ex03.GarageLogic
             }
         }
 
-        protected void CreateEngineByType(Engine.eEngineType i_EngineType, float i_MaxBatteryTime, FuelEngine.eFuelType i_FuelType, float i_MaxFuelTank)
-        {
-            if (i_EngineType == Engine.eEngineType.Electric)
-            {
-                m_Engine = new ElectricEngine(i_MaxBatteryTime);
-            }
-            else
-            {
-                m_Engine = new FuelEngine(i_FuelType, i_MaxFuelTank);
-            }
-        }
+        //protected void CreateEngineByType(Engine.eEngineType i_EngineType, float i_MaxBatteryTime, FuelEngine.eFuelType i_FuelType, float i_MaxFuelTank)
+        //{
+        //    if (i_EngineType == Engine.eEngineType.Electric)
+        //    {
+        //        //m_Engine = new ElectricEngine(i_MaxBatteryTime);
+        //    }
+        //    else
+        //    {
+        //        //m_Engine = new FuelEngine(i_FuelType, i_MaxFuelTank);
+        //    }
+        //}
 
         public override bool Equals(object obj)
         {

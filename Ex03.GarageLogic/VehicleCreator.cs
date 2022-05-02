@@ -21,6 +21,7 @@ namespace Ex03.GarageLogic
                                                                     //or get an enum here and check the match in the UI?
         {
             List<Param> paramsRequiredForCreation;
+
             if (i_VehicleType == eVehicleType.Car)
             {
                 //need to create car to get car's required parameters
@@ -36,24 +37,24 @@ namespace Ex03.GarageLogic
             }
         }
 
-        public Vehicle CreateVehicle(eVehicleType i_VehicleType, eEngineType i_EngineType)
-        {
+        //public Vehicle CreateVehicle(eVehicleType i_VehicleType, eEngineType i_EngineType)
+        //{
 
-        }
+        //}
 
-        private List<Param> getParamsCar()
-        {
+        //private List<Param> getParamsCar()
+        //{
 
-        }
+        //}
 
-        private List<Param> getParamsMotorcycle()
-        {
+        //private List<Param> getParamsMotorcycle()
+        //{
 
-        }
+        //}
 
-        private List<Param> getElectricParams()
-        {
+        //private List<Param> getElectricParams()
+        //{
 
-        }
+        //}
     }
 }

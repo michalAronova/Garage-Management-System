@@ -20,7 +20,7 @@ namespace Ex03.GarageLogic
         private const int k_TireNumber = 4;
         private const int k_MinDoors = 2;
         private const int k_MaxDoors = 5;
-        private const FuelEngine.eFuelType k_FuelType = FuelEngine.eFuelType.Octan95;
+        //private const FuelEngine.eFuelType k_FuelType = FuelEngine.eFuelType.Octan95;
         private const float k_MaxFuelTank = 38;
         private const float k_MaxBatteryTime = 3.3f;
         private const float k_MaxTirePressure = 29;
@@ -47,7 +47,7 @@ namespace Ex03.GarageLogic
         
         private void createEngineByType(Engine.eEngineType i_EngineType)
         {
-            base.CreateEngineByType(i_EngineType, k_MaxBatteryTime, k_FuelType, k_MaxFuelTank);
+            //base.CreateEngineByType(i_EngineType, k_MaxBatteryTime, k_FuelType, k_MaxFuelTank);
         }
     }
 }

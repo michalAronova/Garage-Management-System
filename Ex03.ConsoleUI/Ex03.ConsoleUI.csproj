@@ -35,7 +35,6 @@
     <NoWin32Manifest>true</NoWin32Manifest>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="eServiceChoice.cs" />
     <Compile Include="GarageManager.cs" />
     <Compile Include="GarageUserInterface.cs" />
     <Compile Include="Program.cs" />

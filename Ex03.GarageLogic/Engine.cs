@@ -7,15 +7,24 @@ namespace Ex03.GarageLogic
         private const float k_MinEnergy = 0;
         private readonly float r_MaxEnergy;
         private float m_currentEnergy;
+
         public enum eEngineType
         {
             Electric = 1,
             Fuel,
         }
+
+        public Engine() //temp
+        {
+            r_MaxEnergy = 200;
+        }
+
+
         public Engine(float i_MaxEnergy)
         {
             r_MaxEnergy = i_MaxEnergy;
         }
+
         protected virtual void fillEnergy(float i_EnergyToFill)
         {
             if(getMaxFillPossible() < i_EnergyToFill)

@@ -12,13 +12,14 @@ namespace Ex03.ConsoleUI
 
         public void StartSystem()
         {
-            eServiceOption serviceChoice;
+            int serviceChoice;
 
+            m_UserInterface.PrintWelcomeMessage();
             do
             {
-                serviceChoice = m_UserInterface.GetAndReturnService();
-                runService(serviceChoice);
-            } while (serviceChoice != eServiceOption.ExitSystem);
+                serviceChoice = m_UserInterface.GetAndReturnUserChoice(Enum.GetValues(typeof(eServiceOption)), Enum.GetNames(typeof(eServiceOption)), "service");
+                runService((eServiceOption)serviceChoice);
+            } while (serviceChoice != (int)eServiceOption.ExitSystem);
         }
 
         //try
@@ -41,19 +42,19 @@ namespace Ex03.ConsoleUI
                     showAllLicenseNumbers();
                     break;
                 case eServiceOption.ChangeVehicleStatus:
-                    //changeVehicleStatus();
+                    changeVehicleStatus();
                     break;
                 case eServiceOption.FillTiresAirToMax:
-                    //fillTiresAirToMax();
+                    fillTiresAirToMax();
                     break;
                 case eServiceOption.RefuelVehicleTank:
-                    //refuelVehicleTank();
+                    refuelVehicleTank();
                     break;
                 case eServiceOption.ChargeVehicle:
-                    //chargeVehicle();
+                    chargeVehicle();
                     break;
                 case eServiceOption.ShowVehicleFullDetails:
-                    //printVehicleFullDetails();
+                    printVehicleFullDetails();
                     break;
                 case eServiceOption.ExitSystem:
                     m_UserInterface.PrintExitMessage();
@@ -68,15 +69,18 @@ namespace Ex03.ConsoleUI
 
         private void showAllLicenseNumbers()
         {
-            int filterWanted = m_UserInterface.GetAndReturnFilterByStatus(); //maybe generic func gets int between min max
+            bool toFilter = m_UserInterface.AskUserIfToFilterByStatus();
+            int? filterWanted = null;
             List<string> licenseNumbersToPrintList = new List<string>();
 
-            if (filterWanted == 0)
+            if (!toFilter)
             {
                 licenseNumbersToPrintList = m_Garage.GetAllLicenseNumbers();
             }
             else
             {
+                filterWanted = m_UserInterface.GetAndReturnUserChoice(Enum.GetValues(typeof(GarageVehicle.eVehicleStatus)),
+                    Enum.GetNames(typeof(GarageVehicle.eVehicleStatus)), "status");
                 licenseNumbersToPrintList = m_Garage.GetAllLicenseNumbersByStatus((GarageVehicle.eVehicleStatus)filterWanted);
             }
             //message ?
@@ -85,27 +89,49 @@ namespace Ex03.ConsoleUI
 
         private void changeVehicleStatus()
         {
+            string licenseNumber = m_UserInterface.GetValidLicenseNumber();
+            int selectedStatus = m_UserInterface.GetAndReturnUserChoice(Enum.GetValues(typeof(GarageVehicle.eVehicleStatus)),
+                    Enum.GetNames(typeof(GarageVehicle.eVehicleStatus)), "status");
+            bool vehicleFound = m_Garage.ChangeVehicleStatusByLicenseNumber(licenseNumber, (GarageVehicle.eVehicleStatus)selectedStatus);
 
+            m_UserInterface.PrintResult("Vehicle status changed successfully", vehicleFound, licenseNumber);
         }
 
         private void fillTiresAirToMax()
         {
+            string licenseNumber = m_UserInterface.GetValidLicenseNumber();
+            bool vehicleFound = m_Garage.FillTiresAirToMaxByLicenseNumber(licenseNumber);
 
+            m_UserInterface.PrintResult("Vehicle tires filled successfully", vehicleFound, licenseNumber);
         }
 
         private void refuelVehicleTank()
         {
-
+            string licenseNumber = m_UserInterface.GetValidLicenseNumber();
+            FuelEngine.eFuelType fuelType = (FuelEngine.eFuelType)m_UserInterface.GetAndReturnUserChoice
+                (Enum.GetValues(typeof(FuelEngine.eFuelType)),
+                Enum.GetNames(typeof(FuelEngine.eFuelType)), "fuel type");
+            float amountToFuel = m_UserInterface.GetFloatFromUser("amount to fuel");
+            bool vehicleFound = m_Garage.RefuelVehicleTankByLicenseNumber(licenseNumber, fuelType, amountToFuel);
+            //exeption
+            m_UserInterface.PrintResult("Vehicle tank filled successfully", vehicleFound, licenseNumber);
         }
 
         private void chargeVehicle()
         {
-
+            string licenseNumber = m_UserInterface.GetValidLicenseNumber();
+            float amountToCharge = m_UserInterface.GetFloatFromUser("amount to charge");
+            bool vehicleFound = m_Garage.ChargeVehicleByLicenseNumber(licenseNumber, amountToCharge);
+            //exeption
+            m_UserInterface.PrintResult("Vehicle charged successfully", vehicleFound, licenseNumber);
         }
 
         private void printVehicleFullDetails()
         {
+            string licenseNumber = m_UserInterface.GetValidLicenseNumber();
 
+            m_Garage.GetVehicleFullDetailsByLicenseNumber(licenseNumber);
+            //continue..
         }
     }
 }
