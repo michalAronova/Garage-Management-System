@@ -4,8 +4,8 @@
     {
         public static void Main()
         {
-            GarageUserInterface garageUI = new GarageUserInterface();
-            garageUI.StartSystem();
+            GarageManager garageManager = new GarageManager();
+            garageManager.StartSystem();
         }
     }
 }

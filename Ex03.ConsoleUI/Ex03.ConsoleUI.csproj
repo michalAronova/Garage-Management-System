@@ -36,6 +36,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="eServiceChoice.cs" />
+    <Compile Include="GarageManager.cs" />
     <Compile Include="GarageUserInterface.cs" />
     <Compile Include="Program.cs" />
   </ItemGroup>
@@ -44,6 +45,11 @@
       <Project>{3bc0e4ef-aaec-458e-a9bb-b107f857742b}</Project>
       <Name>Ex03.GarageLogic</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Ex02.ConsoleUtils">
+      <HintPath>..\..\..\..\..\..\Temp\Ex02.ConsoleUtils.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

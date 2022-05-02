@@ -7,168 +7,148 @@ namespace Ex03.ConsoleUI
 {
     public class GarageUserInterface
     {
-        private readonly string[] r_ServicesNames =
-            {
-                "Enter new vehicle to the garage",
-                "Show all license numbers in the garage",
-                "Change a vehicle's status", "Fill a vehicle's tires to maximum",
-                "Refuel a vehicle", "Charge a vehicle", 
-                "Show a vehicle's full details", "Exit the system"
-            };
-        private Garage m_Garage = new Garage();
-        public void StartSystem()
+        public eServiceOption GetAndReturnService()
         {
-            bool runSystem = true;
-            eServiceChoice serviceChoice;
-
-            while (runSystem)
-            {
-                //clear screen//
-                printMenu();
-                serviceChoice = getServiceChoice();
-                runSystem = performService(serviceChoice);
-            }
+            //try cache?
+            printServiceMenu();
+            return getServiceChoice();
         }
 
-        private void printMenu()
+        public int GetAndReturnFilterByStatus()
+        {
+            //try cache?
+            printFilterMenu();
+            return getStatusChoice();
+            
+        }
+
+        private void printServiceMenu()
         {
             string welcomeMessage = 
 @"Welcome to The Garage. 
 Please choose the number of the service you wish to perform:";
-            StringBuilder menu = new StringBuilder(welcomeMessage);
-            appendAllServices(menu);
-            Console.WriteLine(menu.ToString());
+            StringBuilder menuString = appendAllServices();
+
+            Ex02.ConsoleUtils.Screen.Clear();
+            Console.WriteLine(@"{0}
+{1}", welcomeMessage, menuString);
         }
 
-        private void appendAllServices(StringBuilder i_AppendTo)
+        private StringBuilder appendAllServices()
         {
+            StringBuilder servicesToString = new StringBuilder();
             int serviceNum = 1;
-            foreach(string serviceName in r_ServicesNames)
+
+            foreach(string serviceName in Enum.GetNames(typeof(eServiceOption)))
             {
-                i_AppendTo.Append(string.Format("#{0} - ", serviceNum));
+                servicesToString.Append(string.Format("#{0} - ", serviceNum));
                 serviceNum++;
-                i_AppendTo.Append(serviceName);
-                i_AppendTo.AppendLine();
+                servicesToString.Append(insertSpacesToStr(serviceName));
+                servicesToString.AppendLine();
             }
+
+            return servicesToString;
         }
 
-        private eServiceChoice getServiceChoice()
+        private StringBuilder insertSpacesToStr(string i_StringToEdit)
         {
-            eServiceChoice userServiceChoice = eServiceChoice.invalid; ///////////////<<<<maybe not okay to give this "default"
-            string choiceString;
+            StringBuilder EditedString = new StringBuilder(i_StringToEdit[0].ToString());
+
+            for (int i = 1; i < i_StringToEdit.Length; i++)
+            {
+                if (char.IsUpper(i_StringToEdit[i]))
+                {
+                    EditedString.Append(' ');
+                }
+
+                EditedString.Append(i_StringToEdit[i]);
+            }
+
+            return EditedString;
+        }
+
+        private eServiceOption getServiceChoice() //refactor?
+        {
+            eServiceOption userServiceChoice;
             int choiceNumber;
-            bool userInputIsNumber;
-            string errorMessage;
-            choiceString = Console.ReadLine();
-            userInputIsNumber = int.TryParse(choiceString, out choiceNumber);
-            if (!userInputIsNumber)
+
+            while (!int.TryParse(Console.ReadLine(), out choiceNumber)) { } //exeption
+            if (Enum.IsDefined(typeof(eServiceOption), choiceNumber))
             {
-                throw new FormatException("Error: your choice may only be an integer!");
+                userServiceChoice = (eServiceOption)choiceNumber;
             }
-            else if(choiceNumber < 1 || choiceNumber > r_ServicesNames.Length)
+            else
             {
-                errorMessage = string.Format("There is no available #{0} service. Please choose a number between", choiceNumber);
-                throw new ValueOutOfRangeException(errorMessage, r_ServicesNames.Length, 1);
+                //throw exeption refactor
+                throw new ValueOutOfRangeException("Service option invalid", Enum.GetValues(typeof(eServiceOption)).Length, 1);
             }
 
-            switch (choiceNumber)
-            {
-                case 1:
-                    userServiceChoice = eServiceChoice.enterNewVehicle;
-                    break;
-                case 2:
-                    userServiceChoice = eServiceChoice.showAllLicenseNumbers;
-                    break;
-                case 3:
-                    userServiceChoice = eServiceChoice.changeVehicleStatus;
-                    break;
-                case 4:
-                    userServiceChoice = eServiceChoice.fillTiresAirToMax;
-                    break;
-                case 5:
-                    userServiceChoice = eServiceChoice.refuelVehicleTank;
-                    break;
-                case 6:
-                    userServiceChoice = eServiceChoice.chargeVehicle;
-                    break;
-                case 7:
-                    userServiceChoice = eServiceChoice.changeVehicleStatus;
-                    break;
-                case 8:
-                    userServiceChoice = eServiceChoice.exitSystem;
-                    break;
-
-            }
             return userServiceChoice;
         }
 
-        private bool performService(eServiceChoice i_ServiceChoice)
+        private int getStatusChoice() //refactor?
         {
-            bool runSystem = true;
-            switch (i_ServiceChoice)
+            int choiceNumber;
+
+            while (!int.TryParse(Console.ReadLine(), out choiceNumber)) { } //exeption
+            if (!Enum.IsDefined(typeof(eServiceOption), choiceNumber) && choiceNumber != 0)
             {
-                case eServiceChoice.enterNewVehicle:
-                    enterNewVehicle();
-                    break;
-                case eServiceChoice.showAllLicenseNumbers:
-                    printAllLicenseNumbers();
-                    break;
-                case eServiceChoice.changeVehicleStatus:
-                    changeVehicleStatus();
-                    break;
-                case eServiceChoice.fillTiresAirToMax:
-                    fillTiresAirToMax();
-                    break;
-                case eServiceChoice.refuelVehicleTank:
-                    refuelVehicleTank();
-                    break;
-                case eServiceChoice.chargeVehicle:
-                    chargeVehicle();
-                    break;
-                case eServiceChoice.showVehicleFullDetails:
-                    printVehicleFullDetails();
-                    break;
-                case eServiceChoice.exitSystem:
-                    Console.WriteLine("Goodbye, hope to see you again soon :)");
-                    runSystem = !runSystem;
-                    break;
+                throw new ValueOutOfRangeException("status option invalid", Enum.GetValues(typeof(GarageVehicle.eVehicleStatus)).Length, 0);
             }
-            return runSystem;
+
+            return choiceNumber;
         }
 
-        private void enterNewVehicle()
+        //        if (!userInputIsNumber)
+        //            {
+        //                throw new FormatException("Error: your choice may only be an integer!");
+        //    }
+        //            else if(choiceNumber< 1 || choiceNumber> r_ServicesNames.Length)
+        //            {
+        //                errorMessage = string.Format("There is no available #{0} service. Please choose a number between", choiceNumber);
+        //                throw new ValueOutOfRangeException(errorMessage, r_ServicesNames.Length, 1);
+        //}
+
+        private void printFilterMenu()
         {
+            string filterMenuString = "Please choose filter wanted:";
+            StringBuilder menu = appendAllFilters();
 
-        }
-
-        private void printAllLicenseNumbers()
-        {
-            //here need to choose if to filter by status
-        }
-
-        private void changeVehicleStatus()
-        {
-
-        }
-
-        private void fillTiresAirToMax()
-        {
-
-        }
-
-        private void refuelVehicleTank()
-        {
+            Ex02.ConsoleUtils.Screen.Clear();
+            Console.WriteLine(@"{0}
+{1}", filterMenuString, menu);
 
         }
 
-        private void chargeVehicle()
+        private StringBuilder appendAllFilters()
         {
+            StringBuilder vehicleStatusToString = new StringBuilder("#0 - All");
+            int statusNum = 1;
+            string vehicleStr = string.Format(" vehicles{0}", (Environment.NewLine));
 
+            vehicleStatusToString.Append(vehicleStr);
+            foreach (string statusName in Enum.GetNames(typeof(GarageVehicle.eVehicleStatus)))
+            {
+                vehicleStatusToString.Append(string.Format("#{0} - ", statusNum));
+                statusNum++;
+                vehicleStatusToString.Append(insertSpacesToStr(statusName));
+                vehicleStatusToString.Append(vehicleStr);
+            }
+
+            return vehicleStatusToString;
         }
 
-        private void printVehicleFullDetails()
+        public void PrintList(List<string> i_ListToPrint)
         {
+            foreach(string stringInList in i_ListToPrint)
+            {
+                Console.WriteLine(stringInList);
+            }
+        }
 
+        public void PrintExitMessage()
+        {
+            Console.WriteLine("Goodbye, hope to see you again soon :)");
         }
     }
 }

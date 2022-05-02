@@ -9,7 +9,7 @@
 
         public enum eVehicleStatus
         {
-            InFix,
+            InFix = 1,
             Fixed,
             PaidFor
         }
