@@ -14,12 +14,26 @@ namespace Ex03.GarageLogic
         public enum eEngineType
         {
             Electric = 1,
-            NonElectric,
+            Fuel,
         }
 
-        public List<Param> getParamsForCreation(eVehicleType i_VehicleType, eEngineType i_EngineType)
+        public void getParamsForCreation(eVehicleType i_VehicleType) //should i get a string here and see if it matches an enum
+                                                                    //or get an enum here and check the match in the UI?
         {
-            ///
+            List<Param> paramsRequiredForCreation;
+            if (i_VehicleType == eVehicleType.Car)
+            {
+                //need to create car to get car's required parameters
+            }
+            else if (i_VehicleType == eVehicleType.Motorcycle)
+            {
+                //as above
+            }
+            else if (i_VehicleType == eVehicleType.Truck)
+            {
+                //as above
+
+            }
         }
 
         public Vehicle CreateVehicle(eVehicleType i_VehicleType, eEngineType i_EngineType)
@@ -27,7 +41,7 @@ namespace Ex03.GarageLogic
 
         }
 
-        private List<Param> getParamsForCar()
+        private List<Param> getParamsCar()
         {
 
         }

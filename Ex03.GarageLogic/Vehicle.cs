@@ -1,29 +1,74 @@
 ﻿using System.Collections.Generic;
+using System.Security.Cryptography;
 
 namespace Ex03.GarageLogic
 {
     public abstract class Vehicle
     {
-        private readonly string r_ModelName;
         private readonly string r_LicenseNumber;
-        private float m_EnergyLeft;
         private readonly List<Tire> r_Tires;
-        private Engine m_Engine;
-        private readonly Param[] r_Parameters;
+        private string m_ModelName;
+        protected Engine m_Engine;
 
-        /// <summary>
-        /// vehicle get params needed will return a vector with the params we need
-        /// "license number"
-        /// method - that gets a string and checks that it matches the needs (if not returns exception)
-        /// string - "license needs to be 8 digits"
-        /// </summary>
-        public Vehicle()
+        private readonly List<Param> r_Parameters;
+
+        public Vehicle(string i_LicenseNumber, int i_NumberOfTires)
         {
-            
+            r_LicenseNumber = i_LicenseNumber;
+            r_Tires = new List<Tire>(i_NumberOfTires);
+
+            r_Parameters = new List<Param>(3);
+            r_Parameters[0] = new Param("Model name", "name", typeof(string));
+            r_Parameters[1] = new Param("Energy left in engine", "float", typeof(int));
+            r_Parameters[2] = new Param("Current tire air pressure in all tires", "number", typeof(float));
         }
-        public virtual List<Param> getParamsRequired()
-        {
 
+        public virtual void createTires(float i_MaxAirPressure, string i_Manufacturer, float i_CurrentAirPressure)
+        {
+            for(int i = 0; i < r_Tires.Count; i++)
+            {
+                r_Tires[i] = new Tire(i_MaxAirPressure, i_Manufacturer);
+            }
+            InflateAllTires(i_CurrentAirPressure);
+        }
+        public void InflateAllTires(float i_AirPressureToInflateWith)
+        {
+            foreach(Tire tire in r_Tires)
+            {
+                tire.Inflate(i_AirPressureToInflateWith);
+            }
+        }
+
+        public void InflateByTire(int i_TireToInflate, float i_AirPressureToInflateWith)
+        {
+            r_Tires[i_TireToInflate].Inflate(i_AirPressureToInflateWith);
+        }
+        protected List<Param> Parameters
+        {
+            get
+            {
+                return r_Parameters;
+            }
+        }
+
+        public int numberOfBaseParams
+        {
+            get
+            {
+                return r_Parameters.Count;
+            }
+        }
+
+        protected void CreateEngineByType(Engine.eEngineType i_EngineType, float i_MaxBatteryTime, FuelEngine.eFuelType i_FuelType, float i_MaxFuelTank)
+        {
+            if (i_EngineType == Engine.eEngineType.Electric)
+            {
+                m_Engine = new ElectricEngine(i_MaxBatteryTime);
+            }
+            else
+            {
+                m_Engine = new FuelEngine(i_FuelType, i_MaxFuelTank);
+            }
         }
 
         public override bool Equals(object obj)
