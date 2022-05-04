@@ -2,7 +2,7 @@
 {
     public enum eServiceOption
     {
-        EnterNewVehicle = 1,
+        EnterNewVehicle,
         ShowAllLicenseNumbers,
         ChangeVehicleStatus,
         FillTiresAirToMax,

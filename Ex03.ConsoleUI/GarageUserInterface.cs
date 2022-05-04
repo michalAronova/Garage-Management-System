@@ -2,40 +2,48 @@
 using System.Collections.Generic;
 using System.Text;
 using Ex03.GarageLogic;
+using System.Linq;
 
 namespace Ex03.ConsoleUI
 {
     public class GarageUserInterface
     {
-        public int GetAndReturnUserChoice(Array i_eNumArray, string[] i_eNumNamesArray, string i_OptionRequired)
+        private Garage m_Garage = new Garage();
+        private readonly VehicleCreator r_VehicleFactory = new VehicleCreator();
+
+        public int GetUserChoice(Array i_EnumArray, string i_OptionRequired)
         {
             string menu = "Please chose number of " + i_OptionRequired + " wanted:";
+            int userChoice;
 
             Ex02.ConsoleUtils.Screen.Clear();
             Console.WriteLine(menu);
-            printUserOptions(i_eNumNamesArray, i_eNumArray);
-
-            return getUserChoice(i_eNumNamesArray.Length, i_OptionRequired);
+            printUserOptions(i_EnumArray);
+            userChoice = getUserChoice(i_EnumArray.Length, i_OptionRequired);
+            
+            return (int)i_EnumArray.GetValue(userChoice - 1);
         }
 
         private int getUserChoice(int i_MaxValue, string i_OptionRequired)
         {
             int choiceNumber;
 
-            while (!int.TryParse(Console.ReadLine(), out choiceNumber)) { } //exeption?
-            if (choiceNumber < 1 || choiceNumber > i_MaxValue)
+            while (!int.TryParse(Console.ReadLine(), out choiceNumber) || choiceNumber < 1 || choiceNumber > i_MaxValue)
             {
-                throw new ValueOutOfRangeException(i_OptionRequired + " option invalid", i_MaxValue, 1); //refactor
+                Console.WriteLine("Invalid {0} choice! Please try again", i_OptionRequired);
             }
 
             return choiceNumber;
         }
 
-        private void printUserOptions(string[] i_eNumNamesArray, Array i_eNumArray)
+        private void printUserOptions(Array i_EnumArray)
         {
-            for (int i = 0; i < i_eNumArray.Length; i++)
+            object value;
+
+            for (int i = 0; i < i_EnumArray.Length; i++)
             {
-                Console.WriteLine("#{0} - {1}", (int)i_eNumArray.GetValue(i), insertSpacesToStr(i_eNumNamesArray[i]));
+                value = i_EnumArray.GetValue(i);
+                Console.WriteLine("#{0} - {1}", i + 1, insertSpacesToStr(value.ToString()));
             }
         }
 
@@ -63,12 +71,6 @@ namespace Ex03.ConsoleUI
             return EditedString;
         }
 
-        //private T printAndGetChoice<T>(string[] i_Options, string i_RequiredChoice)
-        //{
-        //    T choice;
-        //    return choice;
-        //}
-
         private bool getBoolFromUser()
         {
             Console.WriteLine("Plase enter Y/N:");
@@ -83,11 +85,11 @@ namespace Ex03.ConsoleUI
             return input == "Y";
         }
 
-        public float GetUnsigedFloatFromUser(string i_Message)
+        public float GetPositiveFloatFromUser(string i_Message)
         {
             float input;
             Console.WriteLine("Please enter " + i_Message + ":");
-            while (!float.TryParse(Console.ReadLine(), out input) || input < 0) //exeption?
+            while (!float.TryParse(Console.ReadLine(), out input) || input <= 0)
             {
                 Console.WriteLine("Wrong input! please try again");
             }
@@ -141,6 +143,127 @@ namespace Ex03.ConsoleUI
 
             Console.WriteLine(message);
             System.Threading.Thread.Sleep(3000);
+        }
+
+        public void StartSystem()
+        {
+            int serviceChoice;
+
+            PrintWelcomeMessage();
+            do
+            {
+                serviceChoice = GetUserChoice(Enum.GetValues(typeof(eServiceOption)), "service");
+                runService((eServiceOption)serviceChoice);
+            } while (serviceChoice != (int)eServiceOption.ExitSystem);
+        }
+
+        private void runService(eServiceOption i_ServiceChoice)
+        {
+            switch (i_ServiceChoice)
+            {
+                case eServiceOption.EnterNewVehicle:
+                    enterNewVehicle();
+                    break;
+                case eServiceOption.ShowAllLicenseNumbers:
+                    showAllLicenseNumbers();
+                    break;
+                case eServiceOption.ChangeVehicleStatus:
+                    changeVehicleStatus();
+                    break;
+                case eServiceOption.FillTiresAirToMax:
+                    fillTiresAirToMax();
+                    break;
+                case eServiceOption.RefuelVehicleTank:
+                    refuelVehicleTank();
+                    break;
+                case eServiceOption.ChargeVehicle:
+                    chargeVehicle();
+                    break;
+                case eServiceOption.ShowVehicleFullDetails:
+                    showVehicleFullDetails();
+                    break;
+                case eServiceOption.ExitSystem:
+                    PrintExitMessage();
+                    break;
+            }
+        }
+
+        private void enterNewVehicle()
+        {
+            string licenseNumber = GetValidLicenseNumber();
+            bool vehicleFound = m_Garage.ChangeVehicleStatusByLicenseNumber(licenseNumber, GarageVehicle.eVehicleStatus.InFix);
+
+            if (!vehicleFound)
+            {
+                //enter new vehicle
+            }
+            else
+            {
+                PrintResult("Vehicle status changed successfully", vehicleFound, licenseNumber);
+            }
+        }
+
+        private void showAllLicenseNumbers()
+        {
+            bool toFilter = AskUserIfToFilterByStatus();
+            int? filterWanted = null;
+            List<string> licenseNumbersToPrintList = new List<string>();
+
+            if (!toFilter)
+            {
+                licenseNumbersToPrintList = m_Garage.GetAllLicenseNumbers();
+            }
+            else
+            {
+                filterWanted = GetUserChoice(Enum.GetValues(typeof(GarageVehicle.eVehicleStatus)), "status");
+                licenseNumbersToPrintList = m_Garage.GetAllLicenseNumbersByStatus((GarageVehicle.eVehicleStatus)filterWanted);
+            }
+            //message ?
+            PrintList(licenseNumbersToPrintList);
+        }
+
+        private void changeVehicleStatus()
+        {
+            string licenseNumber = GetValidLicenseNumber();
+            int selectedStatus = GetUserChoice(Enum.GetValues(typeof(GarageVehicle.eVehicleStatus)), "status");
+            bool vehicleFound = m_Garage.ChangeVehicleStatusByLicenseNumber(licenseNumber, (GarageVehicle.eVehicleStatus)selectedStatus);
+
+            PrintResult("Vehicle status changed successfully", vehicleFound, licenseNumber);
+        }
+
+        private void fillTiresAirToMax()
+        {
+            string licenseNumber = GetValidLicenseNumber();
+            bool vehicleFound = m_Garage.FillTiresAirToMaxByLicenseNumber(licenseNumber);
+
+            PrintResult("Vehicle tires filled successfully", vehicleFound, licenseNumber);
+        }
+
+        private void refuelVehicleTank()
+        {
+            string licenseNumber = GetValidLicenseNumber();
+            FuelEngine.eFuelType fuelType = (FuelEngine.eFuelType)GetUserChoice(Enum.GetValues(typeof(FuelEngine.eFuelType)), "fuel type");
+            float amountToFuel = GetPositiveFloatFromUser("amount to fuel");
+            bool vehicleFound = m_Garage.RefuelVehicleTankByLicenseNumber(licenseNumber, fuelType, amountToFuel);
+            //exeption from logic
+            PrintResult("Vehicle tank filled successfully", vehicleFound, licenseNumber);
+        }
+
+        private void chargeVehicle()
+        {
+            string licenseNumber = GetValidLicenseNumber();
+            float amountToCharge = GetPositiveFloatFromUser("amount to charge");
+            bool vehicleFound = m_Garage.ChargeVehicleByLicenseNumber(licenseNumber, amountToCharge);
+            //exeption from logic
+            PrintResult("Vehicle charged successfully", vehicleFound, licenseNumber);
+        }
+
+        private void showVehicleFullDetails()
+        {
+            string licenseNumber = GetValidLicenseNumber();
+
+            m_Garage.GetVehicleFullDetailsByLicenseNumber(licenseNumber);
+            //continue..
         }
     }
 }

@@ -6,15 +6,9 @@ namespace Ex03.GarageLogic
     {
         public enum eVehicleType
         {
-            Car = 1,
+            Car,
             Motorcycle,
             Truck,
-        }
-
-        public enum eEngineType
-        {
-            Electric = 1,
-            Fuel,
         }
 
         public void getParamsForCreation(eVehicleType i_VehicleType) //should i get a string here and see if it matches an enum

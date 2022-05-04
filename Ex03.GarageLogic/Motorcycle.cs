@@ -14,7 +14,7 @@ namespace Ex03.GarageLogic
 
         enum eLicenseType
         {
-            A = 1,
+            A,
             A1,
             B1,
             B2
