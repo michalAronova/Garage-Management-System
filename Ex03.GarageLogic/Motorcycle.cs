@@ -39,7 +39,7 @@ namespace Ex03.GarageLogic
         //    base.CreateEngineByType(i_EngineType, k_MaxBatteryTime, k_FuelType, k_MaxFuelTank);
         //}
 
-        public List<Param> Parameters
+        public override List<Param> Parameters
         {
             get
             {

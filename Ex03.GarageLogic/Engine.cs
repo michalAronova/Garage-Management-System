@@ -19,13 +19,12 @@ namespace Ex03.GarageLogic
             r_MaxEnergy = 200;
         }
 
-
         public Engine(float i_MaxEnergy)
         {
             r_MaxEnergy = i_MaxEnergy;
         }
 
-        protected virtual void fillEnergy(float i_EnergyToFill)
+        protected void fillEnergy(float i_EnergyToFill)
         {
             if(getMaxFillPossible() < i_EnergyToFill)
             {

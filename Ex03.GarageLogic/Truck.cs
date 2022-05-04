@@ -23,7 +23,7 @@ namespace Ex03.GarageLogic
             r_Parameters[1] = new Param("Cargo volume", "number", typeof(float));
         }
 
-        public List<Param> Parameters
+        public override List<Param> Parameters
         {
             get
             {

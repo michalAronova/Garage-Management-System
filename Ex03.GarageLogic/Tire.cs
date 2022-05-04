@@ -26,15 +26,13 @@ namespace Ex03.GarageLogic
             float newAirPressure = m_CurrentAirPressure + i_AirToInflateWith;
             string errorMessage;
 
-            if(i_AirToInflateWith < 0)
-            {
-                throw new ArgumentException("Cannot inflate negative amount");
-            }
-            else if(newAirPressure > r_MaxAirPressure)
+            if(newAirPressure > r_MaxAirPressure)
             {
                 errorMessage = string.Format("Request exceeds inflation bound. Current amount of air pressure is {0}. Air pressure must be between" , m_CurrentAirPressure);
                 throw new ValueOutOfRangeException(errorMessage, r_MaxAirPressure, k_MinAirPressure);
             }
+
+            m_CurrentAirPressure = newAirPressure;
         }
     }
 }

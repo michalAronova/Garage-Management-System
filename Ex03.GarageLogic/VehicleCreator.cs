@@ -6,49 +6,41 @@ namespace Ex03.GarageLogic
     {
         public enum eVehicleType
         {
-            Car,
-            Motorcycle,
+            ElectricCar,
+            FuelCar,
+            ElectricMotorcycle,
+            FuelMotorcycle,
             Truck,
         }
 
-        public void getParamsForCreation(eVehicleType i_VehicleType) //should i get a string here and see if it matches an enum
-                                                                    //or get an enum here and check the match in the UI?
+        public Vehicle CreateVehicle(out List<Param> i_RequiredParams, string i_LicenseNum, eVehicleType i_VehicleType)
         {
             List<Param> paramsRequiredForCreation;
+            Vehicle vehicle;
+        
+            if (i_VehicleType == eVehicleType.ElectricCar)
+            {
+                vehicle = new Car(i_LicenseNum, Engine.eEngineType.Electric);
+            }
+            else if (i_VehicleType == eVehicleType.FuelCar)
+            {
+                vehicle = new Car(i_LicenseNum, Engine.eEngineType.Fuel);
+            }
+            else if(i_VehicleType == eVehicleType.ElectricMotorcycle)
+            {
+                vehicle = new Motorcycle(i_LicenseNum, Engine.eEngineType.Electric);
+            }
+            else if (i_VehicleType == eVehicleType.FuelMotorcycle)
+            {
+                vehicle = new Motorcycle(i_LicenseNum, Engine.eEngineType.Fuel);
+            }
+            else
+            {
+                vehicle = new Truck(i_LicenseNum);
+            }
 
-            if (i_VehicleType == eVehicleType.Car)
-            {
-                //need to create car to get car's required parameters
-            }
-            else if (i_VehicleType == eVehicleType.Motorcycle)
-            {
-                //as above
-            }
-            else if (i_VehicleType == eVehicleType.Truck)
-            {
-                //as above
-
-            }
+            i_RequiredParams = vehicle.Parameters;
+            return vehicle;
         }
-
-        //public Vehicle CreateVehicle(eVehicleType i_VehicleType, eEngineType i_EngineType)
-        //{
-
-        //}
-
-        //private List<Param> getParamsCar()
-        //{
-
-        //}
-
-        //private List<Param> getParamsMotorcycle()
-        //{
-
-        //}
-
-        //private List<Param> getElectricParams()
-        //{
-
-        //}
     }
 }
