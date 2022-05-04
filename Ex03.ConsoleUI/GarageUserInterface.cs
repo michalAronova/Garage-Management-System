@@ -8,6 +8,7 @@ namespace Ex03.ConsoleUI
 {
     public class GarageUserInterface
     {
+        private const string k_invalidInputMessage = "Invalid input! Please try again:";
         private Garage m_Garage = new Garage();
         private readonly VehicleCreator r_VehicleFactory = new VehicleCreator();
 
@@ -78,7 +79,7 @@ namespace Ex03.ConsoleUI
 
             while (input != "Y" && input != "N")
             {
-                Console.WriteLine("Wrong input! please try again");
+                Console.WriteLine(k_invalidInputMessage);
                 input = Console.ReadLine();
             }
 
@@ -91,7 +92,7 @@ namespace Ex03.ConsoleUI
             Console.WriteLine("Please enter " + i_Message + ":");
             while (!float.TryParse(Console.ReadLine(), out input) || input <= 0)
             {
-                Console.WriteLine("Wrong input! please try again");
+                Console.WriteLine(k_invalidInputMessage);
             }
             
             return input;
@@ -120,6 +121,11 @@ namespace Ex03.ConsoleUI
                 for(int i = 0; i < licenseNumberLength && validInput; i++)
                 {
                     validInput = char.IsDigit(licenseNumber[i]);
+                }
+
+                if (!validInput)
+                {
+                    Console.WriteLine(k_invalidInputMessage);
                 }
             } while (!validInput);
 
@@ -206,19 +212,24 @@ namespace Ex03.ConsoleUI
         private void showAllLicenseNumbers()
         {
             bool toFilter = AskUserIfToFilterByStatus();
-            int? filterWanted = null;
+            int? statusToFilterBy = null;
             List<string> licenseNumbersToPrintList = new List<string>();
+            string filterStr = null;
 
             if (!toFilter)
             {
                 licenseNumbersToPrintList = m_Garage.GetAllLicenseNumbers();
+                filterStr = "All";
             }
             else
             {
-                filterWanted = GetUserChoice(Enum.GetValues(typeof(GarageVehicle.eVehicleStatus)), "status");
-                licenseNumbersToPrintList = m_Garage.GetAllLicenseNumbersByStatus((GarageVehicle.eVehicleStatus)filterWanted);
+                statusToFilterBy = GetUserChoice(Enum.GetValues(typeof(GarageVehicle.eVehicleStatus)), "status");
+                licenseNumbersToPrintList = m_Garage.GetAllLicenseNumbersByStatus((GarageVehicle.eVehicleStatus)statusToFilterBy);
+                filterStr = Enum.GetName(typeof(GarageVehicle.eVehicleStatus), (GarageVehicle.eVehicleStatus)statusToFilterBy);
+                filterStr = insertSpacesToStr(filterStr).ToString();
             }
-            //message ?
+
+            Console.WriteLine("{0} vehicles License numbers:", filterStr);
             PrintList(licenseNumbersToPrintList);
         }
 
