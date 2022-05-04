@@ -83,15 +83,15 @@ namespace Ex03.ConsoleUI
             return input == "Y";
         }
 
-        public float GetFloatFromUser(string i_Message)
+        public float GetUnsigedFloatFromUser(string i_Message)
         {
             float input;
             Console.WriteLine("Please enter " + i_Message + ":");
-            while (!float.TryParse(Console.ReadLine(), out input))
+            while (!float.TryParse(Console.ReadLine(), out input) || input < 0) //exeption?
             {
                 Console.WriteLine("Wrong input! please try again");
             }
-
+            
             return input;
         }
 

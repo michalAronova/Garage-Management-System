@@ -36,7 +36,7 @@ namespace Ex03.ConsoleUI
             switch (i_ServiceChoice)
             {
                 case eServiceOption.EnterNewVehicle:
-                    //enterNewVehicle();
+                    enterNewVehicle();
                     break;
                 case eServiceOption.ShowAllLicenseNumbers:
                     showAllLicenseNumbers();
@@ -54,7 +54,7 @@ namespace Ex03.ConsoleUI
                     chargeVehicle();
                     break;
                 case eServiceOption.ShowVehicleFullDetails:
-                    printVehicleFullDetails();
+                    showVehicleFullDetails();
                     break;
                 case eServiceOption.ExitSystem:
                     m_UserInterface.PrintExitMessage();
@@ -64,7 +64,17 @@ namespace Ex03.ConsoleUI
 
         private void enterNewVehicle()
         {
+            string licenseNumber = m_UserInterface.GetValidLicenseNumber();
+            bool vehicleFound = m_Garage.ChangeVehicleStatusByLicenseNumber(licenseNumber, GarageVehicle.eVehicleStatus.InFix);
 
+            if (!vehicleFound)
+            {
+                //enter new vehicle
+            }
+            else
+            {
+                m_UserInterface.PrintResult("Vehicle status changed successfully", vehicleFound, licenseNumber);
+            }
         }
 
         private void showAllLicenseNumbers()
@@ -111,7 +121,7 @@ namespace Ex03.ConsoleUI
             FuelEngine.eFuelType fuelType = (FuelEngine.eFuelType)m_UserInterface.GetAndReturnUserChoice
                 (Enum.GetValues(typeof(FuelEngine.eFuelType)),
                 Enum.GetNames(typeof(FuelEngine.eFuelType)), "fuel type");
-            float amountToFuel = m_UserInterface.GetFloatFromUser("amount to fuel");
+            float amountToFuel = m_UserInterface.GetUnsigedFloatFromUser("amount to fuel");
             bool vehicleFound = m_Garage.RefuelVehicleTankByLicenseNumber(licenseNumber, fuelType, amountToFuel);
             //exeption
             m_UserInterface.PrintResult("Vehicle tank filled successfully", vehicleFound, licenseNumber);
@@ -120,13 +130,13 @@ namespace Ex03.ConsoleUI
         private void chargeVehicle()
         {
             string licenseNumber = m_UserInterface.GetValidLicenseNumber();
-            float amountToCharge = m_UserInterface.GetFloatFromUser("amount to charge");
+            float amountToCharge = m_UserInterface.GetUnsigedFloatFromUser("amount to charge");
             bool vehicleFound = m_Garage.ChargeVehicleByLicenseNumber(licenseNumber, amountToCharge);
             //exeption
             m_UserInterface.PrintResult("Vehicle charged successfully", vehicleFound, licenseNumber);
         }
 
-        private void printVehicleFullDetails()
+        private void showVehicleFullDetails()
         {
             string licenseNumber = m_UserInterface.GetValidLicenseNumber();
 
