@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reflection;
 using System.Text;
 using Ex03.GarageLogic;
 using System.Linq;
@@ -225,8 +226,8 @@ namespace Ex03.ConsoleUI
         {
             Vehicle newVehicle = createVehicleAndEnterParams(i_LicenseNumber, i_VehicleType);
             GarageVehicle newGarageVehicle;
-            string ownerName, ownerPhoneNumber;
-            getOwnerDetails(out ownerName, out ownerPhoneNumber);
+            string ownerName = "roni", ownerPhoneNumber = "6969";
+            //getOwnerDetails(out ownerName, out ownerPhoneNumber);
             newGarageVehicle = new GarageVehicle(newVehicle, ownerName, ownerPhoneNumber);
             m_Garage.EnterNewVehicle(newGarageVehicle);
         }
@@ -234,23 +235,39 @@ namespace Ex03.ConsoleUI
         {
             List<Param> requiredParams;
             Vehicle newVehicle = r_VehicleCreator.CreateVehicle(i_LicenseNumber, i_VehicleType, out requiredParams);
-            Object[] enteredParams = getParamsFromUser(requiredParams);
-            newVehicle.FillParams(enteredParams);
+            List<Object> enteredParams = getParamsFromUser(requiredParams);
+
+            //newVehicle.FillParams(enteredParams);
+
             return newVehicle;
         }
 
-        private Object[] getParamsFromUser(List<Param> i_RequiredParams)
+        private List<Object> getParamsFromUser(List<Param> i_RequiredParams)
         {
+            String curr;
+            List<Object> parameters = new List<Object>();
+
+            Console.WriteLine("Please enter the following info:");
             foreach(Param parameter in i_RequiredParams)
             {
-                //Console.WriteLine();
+                Console.WriteLine(string.Format("{0}, {1}, (type: {2}).", parameter.Name, parameter.Requirements, parameter.Type.Name));
+                curr = Console.ReadLine();
+                Type type = parameter.Type;
+                MethodInfo parseMethod = parameter.Type == typeof(string) ? null : type.GetMethod("Parse", new Type[] { typeof(string) });
+                if (parseMethod != null) {
+                    parameters.Add(parseMethod.Invoke(null, new Object[] { curr }));
+                }
+
+                parameters.Add(curr);
             }
+
+            return parameters;
         }
 
-        private void getOwnerDetails(out string i_OwnerName, out string i_OwnerPhoneNumber)
-        {
+        //private void getOwnerDetails(out string i_OwnerName, out string i_OwnerPhoneNumber)
+        //{
 
-        }
+        //}
 
         private void showAllLicenseNumbers()
         {

@@ -17,10 +17,10 @@ namespace Ex03.GarageLogic
             r_LicenseNumber = i_LicenseNumber;
             r_Tires = new List<Tire>(i_NumberOfTires);
 
-            r_Parameters = new List<Param>(3);
-            r_Parameters[0] = new Param("Model name", "name", typeof(string));
-            r_Parameters[1] = new Param("Energy left in engine", "float", typeof(int));
-            r_Parameters[2] = new Param("Current tire air pressure in all tires", "number", typeof(float));
+            r_Parameters = new List<Param>();
+            r_Parameters.Add(new Param("Model name", "name", typeof(string)));
+            r_Parameters.Add(new Param("Energy left in engine", "float", typeof(int)));
+            r_Parameters.Add(new Param("Current tire air pressure in all tires", "number", typeof(float)));
         }
 
         public virtual void createTires(float i_MaxAirPressure, string i_Manufacturer, float i_CurrentAirPressure)

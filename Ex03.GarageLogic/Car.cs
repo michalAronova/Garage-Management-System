@@ -31,9 +31,9 @@ namespace Ex03.GarageLogic
         {
             string options = Enum.GetNames(typeof(eColor)).ToString();
             createEngineByType(i_EngineType);
-            r_Parameters = new List<Param>(2);
-            r_Parameters[0] = new Param("car color", options, typeof(string));
-            r_Parameters[1] = new Param("number of doors", string.Format("{0} - {1}", k_MinDoors, k_MaxDoors), typeof(int));
+            r_Parameters = new List<Param>();
+            r_Parameters.Add(new Param("car color", options, typeof(string)));
+            r_Parameters.Add(new Param("number of doors", string.Format("{0} - {1}", k_MinDoors, k_MaxDoors), typeof(int)));
         }
 
         public override List<Param> Parameters
