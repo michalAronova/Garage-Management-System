@@ -14,5 +14,27 @@ namespace Ex03.GarageLogic
             r_ParamRequirements = i_ParamRequirements;
             r_ParamType = i_ParamType;
         }
+
+        public string Name
+        {
+            get
+            {
+                return r_ParamName;
+            }
+        }
+        public string Requirements
+        {
+            get
+            {
+                return r_ParamRequirements;
+            }
+        }
+        public Type Type
+        {
+            get
+            {
+                return r_ParamType;
+            }
+        }
     }
 }

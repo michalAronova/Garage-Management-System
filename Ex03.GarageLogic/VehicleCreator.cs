@@ -13,7 +13,7 @@ namespace Ex03.GarageLogic
             Truck,
         }
 
-        public Vehicle CreateVehicle(out List<Param> i_RequiredParams, string i_LicenseNum, eVehicleType i_VehicleType)
+        public Vehicle CreateVehicle(string i_LicenseNum, eVehicleType i_VehicleType, out List<Param> i_RequiredParams)
         {
             List<Param> paramsRequiredForCreation;
             Vehicle vehicle;

@@ -11,10 +11,9 @@ namespace Ex03.GarageLogic
             return m_GarageVehicles.ContainsKey(i_LicenseNumber);
         }
 
-        public void EnterNewVehicle()
+        public void EnterNewVehicle(GarageVehicle i_NewGarageVehicle)
         {
-            //how do we knows which vehicle we want to make a new one of?
-            //how do we make it extendable?
+            m_GarageVehicles.Add(i_NewGarageVehicle.LicenseNumber, i_NewGarageVehicle);
         }
 
         public List<string> GetAllLicenseNumbers()

@@ -10,11 +10,11 @@ namespace Ex03.ConsoleUI
     {
         private const string k_invalidInputMessage = "Invalid input! Please try again:";
         private Garage m_Garage = new Garage();
-        private readonly VehicleCreator r_VehicleFactory = new VehicleCreator();
+        private readonly VehicleCreator r_VehicleCreator = new VehicleCreator();
 
         public int GetUserChoice(Array i_EnumArray, string i_OptionRequired)
         {
-            string menu = "Please chose number of " + i_OptionRequired + " wanted:";
+            string menu = "Please choose number of " + i_OptionRequired + " wanted:";
             int userChoice;
 
             Ex02.ConsoleUtils.Screen.Clear();
@@ -50,7 +50,7 @@ namespace Ex03.ConsoleUI
 
         public bool AskUserIfToFilterByStatus()
         {
-            Console.WriteLine("Please chose if you want to filter the cars shown:");
+            Console.WriteLine("Please choose if you want to filter the cars shown:");
 
             return getBoolFromUser();
         }
@@ -76,6 +76,7 @@ namespace Ex03.ConsoleUI
         {
             Console.WriteLine("Please enter Y/N:");
             string input = Console.ReadLine();
+            input = input.ToUpper();
 
             while (input != "Y" && input != "N")
             {
@@ -198,11 +199,12 @@ namespace Ex03.ConsoleUI
         {
             string licenseNumber = GetValidLicenseNumber();
             bool vehicleFound = m_Garage.ChangeVehicleStatusByLicenseNumber(licenseNumber, GarageVehicle.eVehicleStatus.InFix);
+            int selectedVehicle;
 
             if (!vehicleFound)
             {
-                ///enter new vehicle
-                /// createVehicleAndEnterParams();
+                selectedVehicle = GetUserChoice(Enum.GetValues(typeof(VehicleCreator.eVehicleType)), "vehicle type");
+                createAndEnterNewGarageVehicle(licenseNumber, (VehicleCreator.eVehicleType)selectedVehicle);
             }
             else
             {
@@ -219,6 +221,36 @@ namespace Ex03.ConsoleUI
         ///                                          --> 
         /// 5. return vehicle
         /// </summary>
+        private void createAndEnterNewGarageVehicle(string i_LicenseNumber, VehicleCreator.eVehicleType i_VehicleType)
+        {
+            Vehicle newVehicle = createVehicleAndEnterParams(i_LicenseNumber, i_VehicleType);
+            GarageVehicle newGarageVehicle;
+            string ownerName, ownerPhoneNumber;
+            getOwnerDetails(out ownerName, out ownerPhoneNumber);
+            newGarageVehicle = new GarageVehicle(newVehicle, ownerName, ownerPhoneNumber);
+            m_Garage.EnterNewVehicle(newGarageVehicle);
+        }
+        private Vehicle createVehicleAndEnterParams(string i_LicenseNumber, VehicleCreator.eVehicleType i_VehicleType)
+        {
+            List<Param> requiredParams;
+            Vehicle newVehicle = r_VehicleCreator.CreateVehicle(i_LicenseNumber, i_VehicleType, out requiredParams);
+            Object[] enteredParams = getParamsFromUser(requiredParams);
+            newVehicle.FillParams(enteredParams);
+            return newVehicle;
+        }
+
+        private Object[] getParamsFromUser(List<Param> i_RequiredParams)
+        {
+            foreach(Param parameter in i_RequiredParams)
+            {
+                //Console.WriteLine();
+            }
+        }
+
+        private void getOwnerDetails(out string i_OwnerName, out string i_OwnerPhoneNumber)
+        {
+
+        }
 
         private void showAllLicenseNumbers()
         {

@@ -51,6 +51,14 @@ namespace Ex03.GarageLogic
             }
         }
 
+        public string LicenseNumber
+        {
+            get
+            {
+                return r_LicenseNumber;
+            }
+        }
+
         public int numberOfBaseParams
         {
             get
