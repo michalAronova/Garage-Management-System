@@ -234,12 +234,12 @@ namespace Ex03.ConsoleUI
         {
             List<Param> requiredParams;
             Vehicle newVehicle = r_VehicleCreator.CreateVehicle(i_LicenseNumber, i_VehicleType, out requiredParams);
-            Object[] enteredParams = getParamsFromUser(requiredParams);
-            newVehicle.FillParams(enteredParams);
+            object[] enteredParams = getParamsFromUser(requiredParams);
+            newVehicle.FillParams(enteredParams.ToList());
             return newVehicle;
         }
 
-        private Object[] getParamsFromUser(List<Param> i_RequiredParams)
+        private object[] getParamsFromUser(List<Param> i_RequiredParams)
         {
             foreach(Param parameter in i_RequiredParams)
             {

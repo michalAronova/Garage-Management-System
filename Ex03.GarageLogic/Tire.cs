@@ -34,5 +34,20 @@ namespace Ex03.GarageLogic
 
             m_CurrentAirPressure = newAirPressure;
         }
+
+        public float MinAirPressure
+        {
+            get
+            {
+                return k_MinAirPressure;
+            }
+        }
+        public float MaxAirPressure
+        {
+            get
+            {
+                return r_MaxAirPressure;
+            }
+        }
     }
 }

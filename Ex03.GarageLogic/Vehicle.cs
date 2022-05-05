@@ -1,29 +1,26 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Security.Cryptography;
 
 namespace Ex03.GarageLogic
 {
     public abstract class Vehicle
     {
+        private const int   k_ParametersRequiredForFullCreation = 3;
+
         private readonly string r_LicenseNumber;
         private readonly List<Tire> r_Tires;
         private string m_ModelName;
         protected readonly Engine r_Engine;
-
-        private readonly List<Param> r_Parameters;
+        
 
         public Vehicle(string i_LicenseNumber, int i_NumberOfTires)
         {
             r_LicenseNumber = i_LicenseNumber;
             r_Tires = new List<Tire>(i_NumberOfTires);
-
-            r_Parameters = new List<Param>(3);
-            r_Parameters[0] = new Param("Model name", "name", typeof(string));
-            r_Parameters[1] = new Param("Energy left in engine", "float", typeof(int));
-            r_Parameters[2] = new Param("Current tire air pressure in all tires", "number", typeof(float));
         }
 
-        public virtual void createTires(float i_MaxAirPressure, string i_Manufacturer, float i_CurrentAirPressure)
+        public virtual void CreateTires(float i_MaxAirPressure, string i_Manufacturer, float i_CurrentAirPressure)
         {
             for(int i = 0; i < r_Tires.Count; i++)
             {
@@ -39,16 +36,18 @@ namespace Ex03.GarageLogic
             }
         }
 
+        public virtual Param[] GetParametersRequired()
+        {
+            Param[] paramsRequired = new Param[k_ParametersRequiredForFullCreation];
+            paramsRequired[0] = new Param("Model name", "name", typeof(string));
+            paramsRequired[1] = new Param("Energy in engine", string.Format("{0} - {1}", r_Engine.MinEnergy, r_Engine.MaxEnergy), typeof(float));
+            paramsRequired[2] = new Param("Current tire air pressure in all tires", string.Format("{0} - {1}", r_Tires[0].MinAirPressure, r_Tires[0].MaxAirPressure), typeof(float));
+            return paramsRequired;
+        }
+
         public void InflateByTire(int i_TireToInflate, float i_AirPressureToInflateWith)
         {
             r_Tires[i_TireToInflate].Inflate(i_AirPressureToInflateWith);
-        }
-        public virtual List<Param> Parameters
-        {
-            get
-            {
-                return r_Parameters;
-            }
         }
 
         public string LicenseNumber
@@ -59,12 +58,16 @@ namespace Ex03.GarageLogic
             }
         }
 
-        public int numberOfBaseParams
+        public virtual void FillParams(List<object> i_Parameters)
         {
-            get
-            {
-                return r_Parameters.Count;
-            }
+            /// 1. model name - string (
+            /// 2. energy left - int (not above max)
+            /// 3. tire air pressure in all - float (not above max)
+            m_ModelName = i_Parameters[0] as string;
+            int energyInEngine = (int)i_Parameters[1];
+            float tirePressure = (float)i_Parameters[2];
+            r_Engine.fillEnergy(energyInEngine);
+            InflateAllTires(tirePressure);
         }
 
         //protected void CreateEngineByType(Engine.eEngineType i_EngineType, float i_MaxBatteryTime, FuelEngine.eFuelType i_FuelType, float i_MaxFuelTank)
