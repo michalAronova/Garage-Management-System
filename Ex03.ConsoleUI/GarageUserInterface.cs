@@ -74,7 +74,7 @@ namespace Ex03.ConsoleUI
 
         private bool getBoolFromUser()
         {
-            Console.WriteLine("Plase enter Y/N:");
+            Console.WriteLine("Please enter Y/N:");
             string input = Console.ReadLine();
 
             while (input != "Y" && input != "N")
@@ -201,13 +201,24 @@ namespace Ex03.ConsoleUI
 
             if (!vehicleFound)
             {
-                //enter new vehicle
+                ///enter new vehicle
+                /// createVehicleAndEnterParams();
             }
             else
             {
                 PrintResult("Vehicle status changed successfully", vehicleFound, licenseNumber);
             }
         }
+
+        /// <summary>
+        /// createVehicleAndEnterParams();
+        /// 1. ask for type
+        /// 2. create from creator and get params in output parameter
+        /// 3. ask for above params (do parsing)
+        /// 4. fill params(receives list/array of objects) (need to have such method in vehicles)
+        ///                                          --> 
+        /// 5. return vehicle
+        /// </summary>
 
         private void showAllLicenseNumbers()
         {

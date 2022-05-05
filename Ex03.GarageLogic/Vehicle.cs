@@ -8,7 +8,7 @@ namespace Ex03.GarageLogic
         private readonly string r_LicenseNumber;
         private readonly List<Tire> r_Tires;
         private string m_ModelName;
-        protected Engine m_Engine;
+        protected readonly Engine r_Engine;
 
         private readonly List<Param> r_Parameters;
 
@@ -43,7 +43,7 @@ namespace Ex03.GarageLogic
         {
             r_Tires[i_TireToInflate].Inflate(i_AirPressureToInflateWith);
         }
-        protected List<Param> Parameters
+        public virtual List<Param> Parameters
         {
             get
             {

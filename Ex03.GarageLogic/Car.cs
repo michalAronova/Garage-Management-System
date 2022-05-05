@@ -36,7 +36,7 @@ namespace Ex03.GarageLogic
             r_Parameters[1] = new Param("number of doors", string.Format("{0} - {1}", k_MinDoors, k_MaxDoors), typeof(int));
         }
 
-        public List<Param> Parameters
+        public override List<Param> Parameters
         {
             get
             {
