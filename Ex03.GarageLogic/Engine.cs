@@ -24,7 +24,7 @@ namespace Ex03.GarageLogic
             r_MaxEnergy = i_MaxEnergy;
         }
 
-        protected void fillEnergy(float i_EnergyToFill)
+        internal void fillEnergy(float i_EnergyToFill)
         {
             if(getMaxFillPossible() < i_EnergyToFill)
             {
@@ -40,6 +40,21 @@ namespace Ex03.GarageLogic
         private float getMaxFillPossible()
         {
             return r_MaxEnergy - m_currentEnergy;
+        }
+
+        public float MinEnergy
+        {
+            get
+            {
+                return k_MinEnergy;
+            }
+        }
+        public float MaxEnergy
+        {
+            get
+            {
+                return r_MaxEnergy;
+            }
         }
     }
 }

@@ -36,5 +36,10 @@ namespace Ex03.GarageLogic
                 return r_ParamType;
             }
         }
+
+        public string requiredParamMessage()
+        {
+            return string.Format("{0} ({1})", r_ParamName, r_ParamRequirements);
+        }
     }
 }

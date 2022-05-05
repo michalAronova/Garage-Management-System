@@ -239,6 +239,8 @@ namespace Ex03.ConsoleUI
 
             //newVehicle.FillParams(enteredParams);
 
+            //object[] enteredParams = getParamsFromUser(requiredParams);
+            newVehicle.FillParams(enteredParams.ToList());
             return newVehicle;
         }
 
