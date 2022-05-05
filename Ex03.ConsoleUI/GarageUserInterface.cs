@@ -87,11 +87,11 @@ namespace Ex03.ConsoleUI
             return input == "Y";
         }
 
-        public float GetPositiveFloatFromUser(string i_Message)
+        public float GetUnsigedFloatFromUser(string i_Message)
         {
             float input;
             Console.WriteLine("Please enter " + i_Message + ":");
-            while (!float.TryParse(Console.ReadLine(), out input) || input <= 0)
+            while (!float.TryParse(Console.ReadLine(), out input) || input < 0)
             {
                 Console.WriteLine(k_invalidInputMessage);
             }
@@ -113,7 +113,7 @@ namespace Ex03.ConsoleUI
             bool validInput = true;
             int licenseNumberLength = 0;
 
-            Console.WriteLine("Please enter license number:");
+            Console.WriteLine("Please enter licence number (1 to 8 numbers):");
             do
             {
                 licenseNumber = Console.ReadLine();
@@ -297,7 +297,7 @@ namespace Ex03.ConsoleUI
         {
             string licenseNumber = GetValidLicenseNumber();
             FuelEngine.eFuelType fuelType = (FuelEngine.eFuelType)GetUserChoice(Enum.GetValues(typeof(FuelEngine.eFuelType)), "fuel type");
-            float amountToFuel = GetPositiveFloatFromUser("amount to fuel");
+            float amountToFuel = GetUnsigedFloatFromUser("amount to fuel");
             bool vehicleFound = m_Garage.RefuelVehicleTankByLicenseNumber(licenseNumber, fuelType, amountToFuel);
             //exeption from logic
             PrintResult("Vehicle tank filled successfully", vehicleFound, licenseNumber);
@@ -306,7 +306,7 @@ namespace Ex03.ConsoleUI
         private void chargeVehicle()
         {
             string licenseNumber = GetValidLicenseNumber();
-            float amountToCharge = GetPositiveFloatFromUser("amount to charge");
+            float amountToCharge = GetUnsigedFloatFromUser("amount to charge");
             bool vehicleFound = m_Garage.ChargeVehicleByLicenseNumber(licenseNumber, amountToCharge);
             //exeption from logic
             PrintResult("Vehicle charged successfully", vehicleFound, licenseNumber);
