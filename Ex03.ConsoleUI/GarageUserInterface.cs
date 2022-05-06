@@ -13,7 +13,7 @@ namespace Ex03.ConsoleUI
         private Garage m_Garage = new Garage();
         private readonly VehicleCreator r_VehicleCreator = new VehicleCreator();
 
-        public int GetUserChoice(Array i_EnumArray, string i_OptionRequired)
+        private int getUserChoice(Array i_EnumArray, string i_OptionRequired)
         {
             string menu = "Please choose number of " + i_OptionRequired + " wanted:";
             int userChoice;
@@ -49,7 +49,7 @@ namespace Ex03.ConsoleUI
             }
         }
 
-        public bool AskUserIfToFilterByStatus()
+        private bool askUserIfToFilterByStatus()
         {
             Console.WriteLine("Please choose if you want to filter the cars shown:");
 
@@ -88,7 +88,7 @@ namespace Ex03.ConsoleUI
             return input == "Y";
         }
 
-        public float GetUnsigedFloatFromUser(string i_Message)
+        private float getUnsigedFloatFromUser(string i_Message)
         {
             float input;
             Console.WriteLine("Please enter " + i_Message + ":");
@@ -100,7 +100,7 @@ namespace Ex03.ConsoleUI
             return input;
         }
 
-        public void PrintList(List<string> i_ListToPrint)
+        private void printList(List<string> i_ListToPrint)
         {
             foreach(string stringInList in i_ListToPrint)
             {
@@ -108,7 +108,7 @@ namespace Ex03.ConsoleUI
             }
         }
 
-        public string GetValidLicenseNumber()
+        private string getValidLicenseNumber()
         {
             string licenseNumber = null;
             bool validInput = true;
@@ -134,18 +134,18 @@ namespace Ex03.ConsoleUI
             return licenseNumber;
         }
 
-        public void PrintWelcomeMessage()
+        private void printWelcomeMessage()
         {
             Console.WriteLine("Welcome to The Garage :)");
             System.Threading.Thread.Sleep(3000);
         }
 
-        public void PrintExitMessage()
+        private void printExitMessage()
         {
             Console.WriteLine("Goodbye, hope to see you again soon :)");
         }
 
-        public void PrintResult(string result , bool i_VehicleFound, string i_LicenseNumber)
+        private void printResult(string result , bool i_VehicleFound, string i_LicenseNumber)
         {
             string message = i_VehicleFound ? result : "License number " + i_LicenseNumber + " Not found!";
 
@@ -157,10 +157,10 @@ namespace Ex03.ConsoleUI
         {
             int serviceChoice;
 
-            PrintWelcomeMessage();
+            printWelcomeMessage();
             do
             {
-                serviceChoice = GetUserChoice(Enum.GetValues(typeof(eServiceOption)), "service");
+                serviceChoice = getUserChoice(Enum.GetValues(typeof(eServiceOption)), "service");
                 runService((eServiceOption)serviceChoice);
             } while (serviceChoice != (int)eServiceOption.ExitSystem);
         }
@@ -191,25 +191,25 @@ namespace Ex03.ConsoleUI
                     showVehicleFullDetails();
                     break;
                 case eServiceOption.ExitSystem:
-                    PrintExitMessage();
+                    printExitMessage();
                     break;
             }
         }
 
         private void enterNewVehicle()
         {
-            string licenseNumber = GetValidLicenseNumber();
+            string licenseNumber = getValidLicenseNumber();
             bool vehicleFound = m_Garage.ChangeVehicleStatusByLicenseNumber(licenseNumber, GarageVehicle.eVehicleStatus.InFix);
             int selectedVehicle;
 
             if (!vehicleFound)
             {
-                selectedVehicle = GetUserChoice(Enum.GetValues(typeof(VehicleCreator.eVehicleType)), "vehicle type");
+                selectedVehicle = getUserChoice(Enum.GetValues(typeof(VehicleCreator.eVehicleType)), "vehicle type");
                 createAndEnterNewGarageVehicle(licenseNumber, (VehicleCreator.eVehicleType)selectedVehicle);
             }
             else
             {
-                PrintResult("Vehicle status changed successfully", vehicleFound, licenseNumber);
+                printResult("Vehicle status changed successfully", vehicleFound, licenseNumber);
             }
         }
 
@@ -231,36 +231,52 @@ namespace Ex03.ConsoleUI
             newGarageVehicle = new GarageVehicle(newVehicle, ownerName, ownerPhoneNumber);
             m_Garage.EnterNewVehicle(newGarageVehicle);
         }
+
         private Vehicle createVehicleAndEnterParams(string i_LicenseNumber, VehicleCreator.eVehicleType i_VehicleType)
         {
             List<Param> requiredParams;
             Vehicle newVehicle = r_VehicleCreator.CreateVehicle(i_LicenseNumber, i_VehicleType, out requiredParams);
             List<Object> enteredParams = getParamsFromUser(requiredParams);
-
-            //newVehicle.FillParams(enteredParams);
-
-            //object[] enteredParams = getParamsFromUser(requiredParams);
             newVehicle.FillParams(enteredParams.ToList());
+
             return newVehicle;
         }
 
         private List<Object> getParamsFromUser(List<Param> i_RequiredParams)
         {
-            String curr;
+            String curr = null;
+            bool paramIsNotValid = true;
             List<Object> parameters = new List<Object>();
+            Type type = null;
+            MethodInfo parseMethod = null;
 
             Console.WriteLine("Please enter the following info:");
             foreach(Param parameter in i_RequiredParams)
             {
-                Console.WriteLine(string.Format("{0}, {1}, (type: {2}).", parameter.Name, parameter.Requirements, parameter.Type.Name));
+                Console.WriteLine(string.Format("{0} ({1})", parameter.Name, parameter.Requirements));
                 curr = Console.ReadLine();
-                Type type = parameter.Type;
-                MethodInfo parseMethod = parameter.Type == typeof(string) ? null : type.GetMethod("Parse", new Type[] { typeof(string) });
+                type = parameter.Type;
+                parseMethod = parameter.Type == typeof(string) ? null : type.GetMethod("Parse", new Type[] { typeof(string) });
                 if (parseMethod != null) {
-                    parameters.Add(parseMethod.Invoke(null, new Object[] { curr }));
-                }
+                    while (paramIsNotValid)
+                    {
+                        try
+                        {
+                            parameters.Add(parseMethod.Invoke(null, new Object[] { curr }));
+                            paramIsNotValid = !true;
+                        }
+                        catch (FormatException exception)
+                        {
+                            Console.WriteLine(k_invalidInputMessage);
+                        }
+                    }
 
-                parameters.Add(curr);
+                    paramIsNotValid = true;
+                }
+                else
+                {
+                    parameters.Add(curr);
+                }
             }
 
             return parameters;
@@ -273,7 +289,7 @@ namespace Ex03.ConsoleUI
 
         private void showAllLicenseNumbers()
         {
-            bool toFilter = AskUserIfToFilterByStatus();
+            bool toFilter = askUserIfToFilterByStatus();
             int? statusToFilterBy = null;
             List<string> licenseNumbersToPrintList = new List<string>();
             string filterStr = null;
@@ -285,55 +301,55 @@ namespace Ex03.ConsoleUI
             }
             else
             {
-                statusToFilterBy = GetUserChoice(Enum.GetValues(typeof(GarageVehicle.eVehicleStatus)), "status");
+                statusToFilterBy = getUserChoice(Enum.GetValues(typeof(GarageVehicle.eVehicleStatus)), "status");
                 licenseNumbersToPrintList = m_Garage.GetAllLicenseNumbersByStatus((GarageVehicle.eVehicleStatus)statusToFilterBy);
                 filterStr = Enum.GetName(typeof(GarageVehicle.eVehicleStatus), (GarageVehicle.eVehicleStatus)statusToFilterBy);
                 filterStr = insertSpacesToStr(filterStr).ToString();
             }
 
             Console.WriteLine("{0} vehicles License numbers:", filterStr);
-            PrintList(licenseNumbersToPrintList);
+            printList(licenseNumbersToPrintList);
         }
 
         private void changeVehicleStatus()
         {
-            string licenseNumber = GetValidLicenseNumber();
-            int selectedStatus = GetUserChoice(Enum.GetValues(typeof(GarageVehicle.eVehicleStatus)), "status");
+            string licenseNumber = getValidLicenseNumber();
+            int selectedStatus = getUserChoice(Enum.GetValues(typeof(GarageVehicle.eVehicleStatus)), "status");
             bool vehicleFound = m_Garage.ChangeVehicleStatusByLicenseNumber(licenseNumber, (GarageVehicle.eVehicleStatus)selectedStatus);
 
-            PrintResult("Vehicle status changed successfully", vehicleFound, licenseNumber);
+            printResult("Vehicle status changed successfully", vehicleFound, licenseNumber);
         }
 
         private void fillTiresAirToMax()
         {
-            string licenseNumber = GetValidLicenseNumber();
+            string licenseNumber = getValidLicenseNumber();
             bool vehicleFound = m_Garage.FillTiresAirToMaxByLicenseNumber(licenseNumber);
 
-            PrintResult("Vehicle tires filled successfully", vehicleFound, licenseNumber);
+            printResult("Vehicle tires filled successfully", vehicleFound, licenseNumber);
         }
 
         private void refuelVehicleTank()
         {
-            string licenseNumber = GetValidLicenseNumber();
-            FuelEngine.eFuelType fuelType = (FuelEngine.eFuelType)GetUserChoice(Enum.GetValues(typeof(FuelEngine.eFuelType)), "fuel type");
-            float amountToFuel = GetUnsigedFloatFromUser("amount to fuel");
+            string licenseNumber = getValidLicenseNumber();
+            FuelEngine.eFuelType fuelType = (FuelEngine.eFuelType)getUserChoice(Enum.GetValues(typeof(FuelEngine.eFuelType)), "fuel type");
+            float amountToFuel = getUnsigedFloatFromUser("amount to fuel");
             bool vehicleFound = m_Garage.RefuelVehicleTankByLicenseNumber(licenseNumber, fuelType, amountToFuel);
             //exeption from logic
-            PrintResult("Vehicle tank filled successfully", vehicleFound, licenseNumber);
+            printResult("Vehicle tank filled successfully", vehicleFound, licenseNumber);
         }
 
         private void chargeVehicle()
         {
-            string licenseNumber = GetValidLicenseNumber();
-            float amountToCharge = GetUnsigedFloatFromUser("amount to charge");
+            string licenseNumber = getValidLicenseNumber();
+            float amountToCharge = getUnsigedFloatFromUser("amount to charge");
             bool vehicleFound = m_Garage.ChargeVehicleByLicenseNumber(licenseNumber, amountToCharge);
             //exeption from logic
-            PrintResult("Vehicle charged successfully", vehicleFound, licenseNumber);
+            printResult("Vehicle charged successfully", vehicleFound, licenseNumber);
         }
 
         private void showVehicleFullDetails()
         {
-            string licenseNumber = GetValidLicenseNumber();
+            string licenseNumber = getValidLicenseNumber();
 
             m_Garage.GetVehicleFullDetailsByLicenseNumber(licenseNumber);
             //continue..

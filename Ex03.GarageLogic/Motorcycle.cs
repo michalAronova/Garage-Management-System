@@ -7,12 +7,11 @@ namespace Ex03.GarageLogic
     public class Motorcycle : Vehicle
     {
         private const int k_TireNumber = 2;
-        //private const FuelEngine.eFuelType k_FuelType = FuelEngine.eFuelType.Octan98;
+        private const FuelEngine.eFuelType k_FuelType = FuelEngine.eFuelType.Octan98;
         private const float k_MaxFuelTank = 6.2f;
         private const float k_MaxBatteryTime = 2.5f;
         private const float k_MaxTirePressure = 31;
         private const int k_ParametersRequiredForFullCreation = 2;
-
 
         enum eLicenseType
         {
@@ -27,22 +26,24 @@ namespace Ex03.GarageLogic
 
         public Motorcycle(string i_LicenseNumber, Engine.eEngineType i_EngineType) : base(i_LicenseNumber, k_TireNumber)
         {
-            //createEngineByType(i_EngineType);
+            createEngineByType(i_EngineType);
+            base.CreateTires(k_MaxTirePressure);
         }
 
-        //private void createEngineByType(Engine.eEngineType i_EngineType)
-        //{
-        //    base.CreateEngineByType(i_EngineType, k_MaxBatteryTime, k_FuelType, k_MaxFuelTank);
-        //}
-
-        public override Param[] GetParametersRequired()
+        private void createEngineByType(Engine.eEngineType i_EngineType)
         {
-            Param[] baseParams = base.GetParametersRequired();
-            Param[] allRequiredParams = new Param[k_ParametersRequiredForFullCreation + baseParams.Length];
-            string options = Enum.GetNames(typeof(eLicenseType)).ToString();
-            allRequiredParams[0] = new Param("License type", options, typeof(string));
-            allRequiredParams[1] = new Param("Engine volume", "number", typeof(float));
-            baseParams.CopyTo(allRequiredParams, k_ParametersRequiredForFullCreation);
+            base.CreateEngineByType(i_EngineType, k_MaxBatteryTime, k_FuelType, k_MaxFuelTank);
+        }
+
+        public override List<Param> GetParametersRequired()
+        {
+            List<Param> allRequiredParams = new List<Param>();
+            string[] options = Enum.GetNames(typeof(eLicenseType));
+
+            allRequiredParams.Add(new Param("License type", string.Join(", ",options), typeof(string)));
+            allRequiredParams.Add(new Param("Engine volume", "number", typeof(float)));
+            allRequiredParams.AddRange(base.GetParametersRequired());
+
             return allRequiredParams;
         }
 

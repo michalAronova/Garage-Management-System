@@ -11,28 +11,30 @@ namespace Ex03.GarageLogic
         private readonly string r_LicenseNumber;
         private readonly List<Tire> r_Tires;
         private string m_ModelName;
-        protected readonly Engine r_Engine;
-        
+        protected Engine m_Engine; // readonly
+
 
         public Vehicle(string i_LicenseNumber, int i_NumberOfTires)
         {
             r_LicenseNumber = i_LicenseNumber;
             r_Tires = new List<Tire>(i_NumberOfTires);
-
-            r_Parameters = new List<Param>();
-            r_Parameters.Add(new Param("Model name", "name", typeof(string)));
-            r_Parameters.Add(new Param("Energy left in engine", "float", typeof(int)));
-            r_Parameters.Add(new Param("Current tire air pressure in all tires", "number", typeof(float)));
         }
 
-        public virtual void CreateTires(float i_MaxAirPressure, string i_Manufacturer, float i_CurrentAirPressure)
+        public virtual void CreateTires(float i_MaxAirPressure)
         {
-            for(int i = 0; i < r_Tires.Count; i++)
+            for (int i = 0; i < r_Tires.Count; i++)
             {
-                r_Tires[i] = new Tire(i_MaxAirPressure, i_Manufacturer);
+                r_Tires[i] = new Tire(i_MaxAirPressure);
             }
-            InflateAllTires(i_CurrentAirPressure);
         }
+        private void setManufacturerAllTires(string i_ManufacturerName)
+        {
+            foreach (Tire tire in r_Tires)
+            {
+                tire.ManufacturerName = i_ManufacturerName;
+            }
+        }
+
         public void InflateAllTires(float i_AirPressureToInflateWith)
         {
             foreach(Tire tire in r_Tires)
@@ -41,12 +43,15 @@ namespace Ex03.GarageLogic
             }
         }
 
-        public virtual Param[] GetParametersRequired()
+        public virtual List<Param> GetParametersRequired()
         {
-            Param[] paramsRequired = new Param[k_ParametersRequiredForFullCreation];
-            paramsRequired[0] = new Param("Model name", "name", typeof(string));
-            paramsRequired[1] = new Param("Energy in engine", string.Format("{0} - {1}", r_Engine.MinEnergy, r_Engine.MaxEnergy), typeof(float));
-            paramsRequired[2] = new Param("Current tire air pressure in all tires", string.Format("{0} - {1}", r_Tires[0].MinAirPressure, r_Tires[0].MaxAirPressure), typeof(float));
+            List<Param> paramsRequired = new List<Param>();
+
+            paramsRequired.Add(new Param("Model name", "letters and numbers", typeof(string)));
+            paramsRequired.Add(new Param("Energy in engine", string.Format("{0} - {1}", m_Engine.MinEnergy, m_Engine.MaxEnergy), typeof(float)));
+            paramsRequired.Add(new Param("Tires manufacturer", "letters and numbers", typeof(string)));
+            paramsRequired.Add(new Param("Current tire air pressure in all tires", "numbers", typeof(float)));
+
             return paramsRequired;
         }
 
@@ -65,27 +70,27 @@ namespace Ex03.GarageLogic
 
         public virtual void FillParams(List<object> i_Parameters)
         {
-            /// 1. model name - string (
-            /// 2. energy left - int (not above max)
-            /// 3. tire air pressure in all - float (not above max)
+            float energyInEngine = (float)i_Parameters[1];
+            string manufacturerName = (string)i_Parameters[2];
+            float tirePressure = (float)i_Parameters[3];
+
             m_ModelName = i_Parameters[0] as string;
-            int energyInEngine = (int)i_Parameters[1];
-            float tirePressure = (float)i_Parameters[2];
-            r_Engine.fillEnergy(energyInEngine);
+            m_Engine.fillEnergy(energyInEngine);
+            setManufacturerAllTires(manufacturerName);
             InflateAllTires(tirePressure);
         }
 
-        //protected void CreateEngineByType(Engine.eEngineType i_EngineType, float i_MaxBatteryTime, FuelEngine.eFuelType i_FuelType, float i_MaxFuelTank)
-        //{
-        //    if (i_EngineType == Engine.eEngineType.Electric)
-        //    {
-        //        //m_Engine = new ElectricEngine(i_MaxBatteryTime);
-        //    }
-        //    else
-        //    {
-        //        //m_Engine = new FuelEngine(i_FuelType, i_MaxFuelTank);
-        //    }
-        //}
+        protected void CreateEngineByType(Engine.eEngineType i_EngineType, float i_MaxBatteryTime, FuelEngine.eFuelType i_FuelType, float i_MaxFuelTank)
+        {
+            if (i_EngineType == Engine.eEngineType.Electric)
+            {
+                m_Engine = new ElectricEngine(i_MaxBatteryTime);
+            }
+            else
+            {
+                m_Engine = new FuelEngine(i_FuelType, i_MaxFuelTank);
+            }
+        }
 
         public override bool Equals(object obj)
         {

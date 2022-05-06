@@ -39,7 +39,8 @@ namespace Ex03.GarageLogic
                 vehicle = new Truck(i_LicenseNum);
             }
 
-            i_RequiredParams = vehicle.Parameters;
+            i_RequiredParams = vehicle.GetParametersRequired();
+
             return vehicle;
         }
     }

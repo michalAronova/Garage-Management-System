@@ -5,7 +5,7 @@ namespace Ex03.GarageLogic
     public abstract class Engine
     {
         private const float k_MinEnergy = 0;
-        private readonly float r_MaxEnergy;
+        private float r_MaxEnergy; //readonly
         private float m_currentEnergy;
 
         public enum eEngineType
@@ -16,7 +16,6 @@ namespace Ex03.GarageLogic
 
         public Engine() //temp
         {
-            r_MaxEnergy = 200;
         }
 
         public Engine(float i_MaxEnergy)

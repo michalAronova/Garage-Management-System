@@ -11,7 +11,7 @@ namespace Ex03.GarageLogic
             Red,
             White,
             Green,
-            Blue,
+            Blue
         }
 
         private eColor m_CarColor;
@@ -29,22 +29,20 @@ namespace Ex03.GarageLogic
 
         public Car(string i_LicenseNumber, Engine.eEngineType i_EngineType) : base(i_LicenseNumber, k_TireNumber)
         {
-            string options = Enum.GetNames(typeof(eColor)).ToString();
             createEngineByType(i_EngineType);
-           }
+            base.CreateTires(k_MaxTirePressure);
+        }
 
-        public override Param[] GetParametersRequired()
+        public override List<Param> GetParametersRequired()
         {
-            Param[] baseParams = base.GetParametersRequired();
-            Param[] allRequiredParams = new Param[k_ParametersRequiredForFullCreation + baseParams.Length];
-            string options = Enum.GetNames(typeof(eColor)).ToString(); //the options here will be messy, not very readable...
-            allRequiredParams[0] = new Param("car color", options, typeof(string)); 
-            allRequiredParams[1] = new Param("number of doors", string.Format("{0} - {1}", k_MinDoors, k_MaxDoors), typeof(int));
-            baseParams.CopyTo(allRequiredParams, k_ParametersRequiredForFullCreation);
+            List<Param> allRequiredParams = new List<Param>();
+            string[] options = Enum.GetNames(typeof(eColor));
+
+            allRequiredParams.Add(new Param("Car color", string.Join(", ", options), typeof(string)));
+            allRequiredParams.Add(new Param("Number of doors", string.Format("{0} - {1}", k_MinDoors, k_MaxDoors), typeof(int)));
+            allRequiredParams.AddRange(base.GetParametersRequired());
+
             return allRequiredParams;
-            r_Parameters = new List<Param>();
-            r_Parameters.Add(new Param("car color", options, typeof(string)));
-            r_Parameters.Add(new Param("number of doors", string.Format("{0} - {1}", k_MinDoors, k_MaxDoors), typeof(int)));
         }
 
         public override void FillParams(List<object> i_Parameters)
@@ -68,7 +66,7 @@ namespace Ex03.GarageLogic
 
         private void createEngineByType(Engine.eEngineType i_EngineType)
         {
-            //base.CreateEngineByType(i_EngineType, k_MaxBatteryTime, k_FuelType, k_MaxFuelTank);
+            base.CreateEngineByType(i_EngineType, k_MaxBatteryTime, k_FuelType, k_MaxFuelTank);
         }
     }
 }

@@ -7,18 +7,13 @@ namespace Ex03.GarageLogic
     public class Tire
     {
         private const int k_MinAirPressure = 0; 
-        private readonly string r_ManufacturerName;
+        private string m_ManufacturerName;
         private float m_CurrentAirPressure = 0;
         private readonly float r_MaxAirPressure;
-        private readonly List<Param> r_Parameters;
 
-        public Tire(float i_MaxAirPressure, string i_ManufacturerName)
+        public Tire(float i_MaxAirPressure)
         {
             r_MaxAirPressure = i_MaxAirPressure;
-            r_ManufacturerName = i_ManufacturerName;
-            r_Parameters = new List<Param>(2);
-            r_Parameters[0] = new Param("Manufacturer name", "name", typeof(string));
-            r_Parameters[1] = new Param("Current air pressure", "number", typeof(float));
         }
 
         public void Inflate(float i_AirToInflateWith)
@@ -42,6 +37,7 @@ namespace Ex03.GarageLogic
                 return k_MinAirPressure;
             }
         }
+
         public float MaxAirPressure
         {
             get
@@ -49,5 +45,18 @@ namespace Ex03.GarageLogic
                 return r_MaxAirPressure;
             }
         }
+
+        public string ManufacturerName
+        {
+            get
+            {
+                return m_ManufacturerName;
+            }
+            set
+            {
+                m_ManufacturerName = value;
+            }
+        }
+
     }
 }
