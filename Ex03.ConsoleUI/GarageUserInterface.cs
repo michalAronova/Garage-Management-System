@@ -10,7 +10,7 @@ namespace Ex03.ConsoleUI
     public class GarageUserInterface
     {
         private const string k_invalidInputMessage = "Invalid input! Please try again:";
-        private Garage m_Garage = new Garage();
+        private Garage m_Garage = new Garage(); //maybe readonly?
         private readonly VehicleCreator r_VehicleCreator = new VehicleCreator();
 
         private int getUserChoice(Array i_EnumArray, string i_OptionRequired)
