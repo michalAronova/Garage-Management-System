@@ -15,7 +15,6 @@ namespace Ex03.GarageLogic
 
         public Vehicle CreateVehicle(string i_LicenseNum, eVehicleType i_VehicleType, out List<Param> i_RequiredParams)
         {
-            List<Param> paramsRequiredForCreation;
             Vehicle vehicle;
         
             if (i_VehicleType == eVehicleType.ElectricCar)

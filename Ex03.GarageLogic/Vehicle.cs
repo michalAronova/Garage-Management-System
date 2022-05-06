@@ -35,12 +35,42 @@ namespace Ex03.GarageLogic
             }
         }
 
+        public void RefuelVehicle(FuelEngine.eFuelType i_FuelType, float i_FuelAmount)
+        {
+            if (m_Engine is ElectricEngine)
+            {
+                throw new ArgumentException("Cannot refuel an electric vehicle!");
+            }
+            (m_Engine as FuelEngine).Refuel(i_FuelType, i_FuelAmount); 
+        }
+
+        public void ChargeVehicle(float i_MinutesToCharge)
+        {
+            if(m_Engine is FuelEngine)
+            {
+                throw new ArgumentException("Cannot charge a fuel vehicle!");
+            }
+            (m_Engine as ElectricEngine).Charge(i_MinutesToCharge);
+        }
+
+        public void InflateAllToMax()
+        {
+            foreach (Tire tire in r_Tires)
+            {
+                tire.InflateToMax();
+            }
+        }
+
         public void InflateAllTires(float i_AirPressureToInflateWith)
         {
             foreach(Tire tire in r_Tires)
             {
                 tire.Inflate(i_AirPressureToInflateWith);
             }
+        }
+        public void InflateByTire(int i_TireToInflate, float i_AirPressureToInflateWith)
+        {
+            r_Tires[i_TireToInflate].Inflate(i_AirPressureToInflateWith);
         }
 
         public virtual List<Param> GetParametersRequired()
@@ -55,16 +85,20 @@ namespace Ex03.GarageLogic
             return paramsRequired;
         }
 
-        public void InflateByTire(int i_TireToInflate, float i_AirPressureToInflateWith)
-        {
-            r_Tires[i_TireToInflate].Inflate(i_AirPressureToInflateWith);
-        }
 
         public string LicenseNumber
         {
             get
             {
                 return r_LicenseNumber;
+            }
+        }
+
+        public Engine.eEngineType EngineType
+        {
+            get
+            {
+                return m_Engine.EngineType;
             }
         }
 
@@ -75,7 +109,7 @@ namespace Ex03.GarageLogic
             float tirePressure = (float)i_Parameters[3];
 
             m_ModelName = i_Parameters[0] as string;
-            m_Engine.fillEnergy(energyInEngine);
+            m_Engine.FillEnergy(energyInEngine);
             setManufacturerAllTires(manufacturerName);
             InflateAllTires(tirePressure);
         }
@@ -92,6 +126,27 @@ namespace Ex03.GarageLogic
             }
         }
 
+        public virtual List<string> GetDetails() //////////?????
+        {
+            ///private readonly string r_LicenseNumber;
+            ///private readonly List<Tire> r_Tires;
+            ///private string m_ModelName;
+            ///protected Engine m_Engine;
+            List<string> details = new List<string>();
+            details.Add(string.Format(""));
+            
+            return details;
+        }
+
+        ///private string getAllTiresDetails()
+        ///{
+        ///    List<string> allTiresDetails = new List<string>();
+        ///    int tireNum = 1;
+        ///    foreach(Tire tire in r_Tires)
+        ///    {
+        ///        allTiresDetails.Add(string.Format("Tire "));
+        ///    }
+        ///}
         public override bool Equals(object obj)
         {
             return base.Equals(obj);

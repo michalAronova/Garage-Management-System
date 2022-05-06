@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Ex03.GarageLogic
 {
@@ -6,7 +7,7 @@ namespace Ex03.GarageLogic
     {
         private const float k_MinEnergy = 0;
         private float r_MaxEnergy; //readonly
-        private float m_currentEnergy;
+        private float m_currentEnergy = 0;
 
         public enum eEngineType
         {
@@ -23,7 +24,8 @@ namespace Ex03.GarageLogic
             r_MaxEnergy = i_MaxEnergy;
         }
 
-        internal void fillEnergy(float i_EnergyToFill)
+        internal void FillEnergy(float i_EnergyToFill) //using this in the vehicle fillParams which
+                                                       //is the only reason its internal and not private...
         {
             if(getMaxFillPossible() < i_EnergyToFill)
             {
@@ -55,5 +57,22 @@ namespace Ex03.GarageLogic
                 return r_MaxEnergy;
             }
         }
+        public float CurrentEnergy
+        {
+            get
+            {
+                return m_currentEnergy;
+            }
+            ///set
+            ///{
+            ///    FillEnergy(value); ////??????? should this be like this?
+            ///}
+        }
+        public abstract eEngineType EngineType
+        {
+            get;
+        }
+
+        public abstract List<string> GetDetails();
     }
 }

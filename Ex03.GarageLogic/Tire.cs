@@ -30,6 +30,19 @@ namespace Ex03.GarageLogic
             m_CurrentAirPressure = newAirPressure;
         }
 
+        public void InflateToMax()
+        {
+            m_CurrentAirPressure = r_MaxAirPressure;
+        }
+
+        public float CurrentAirPressure
+        {
+            get
+            {
+                return m_CurrentAirPressure;
+            }
+        }
+
         public float MinAirPressure
         {
             get

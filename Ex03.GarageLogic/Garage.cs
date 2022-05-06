@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Ex03.GarageLogic
 {
@@ -18,26 +19,44 @@ namespace Ex03.GarageLogic
 
         public List<string> GetAllLicenseNumbers()
         {
-            return null;
+            List<string> allLicenseNumbers = new List<string>();
+            foreach(KeyValuePair<string,GarageVehicle> garageVehiclePair in m_GarageVehicles)
+            {
+                allLicenseNumbers.Add(garageVehiclePair.Key);
+            }
+            return allLicenseNumbers;
         }
 
         public List<string> GetAllLicenseNumbersByStatus(GarageVehicle.eVehicleStatus i_RequestedStatusFilter)
         {
-            return null;
+            List<string> allLicenseNumbersByStatus = new List<string>();
+            foreach (KeyValuePair<string, GarageVehicle> garageVehiclePair in m_GarageVehicles)
+            {
+                if(garageVehiclePair.Value.VehicleStatus == i_RequestedStatusFilter)
+                {
+                    allLicenseNumbersByStatus.Add(garageVehiclePair.Key);
+                }
+            }
+            return allLicenseNumbersByStatus;
         }
 
         public bool ChangeVehicleStatusByLicenseNumber(string i_LicenseNumber, GarageVehicle.eVehicleStatus i_SelectedVehicleStatus)
         {
             bool vehicleFound = IsVehicleInGarage(i_LicenseNumber);
-            // if yes change status
-
+            if(vehicleFound)
+            {
+                m_GarageVehicles[i_LicenseNumber].VehicleStatus = i_SelectedVehicleStatus;
+            }
             return vehicleFound;
         }
 
         public bool FillTiresAirToMaxByLicenseNumber(string i_LicenseNumber)
         {
             bool vehicleFound = IsVehicleInGarage(i_LicenseNumber);
-            // if yes fill air
+            if(vehicleFound)
+            {
+                m_GarageVehicles[i_LicenseNumber].Vehicle.InflateAllToMax();
+            }
 
             return vehicleFound;
         }
@@ -45,7 +64,11 @@ namespace Ex03.GarageLogic
         public bool RefuelVehicleTankByLicenseNumber(string i_LicenseNumber, FuelEngine.eFuelType i_FuelType, float i_FuelAmountToFill)
         {
             bool vehicleFound = IsVehicleInGarage(i_LicenseNumber);
-            // if yes...
+            Vehicle foundVehicle;
+            if(vehicleFound)
+            {
+                m_GarageVehicles[i_LicenseNumber].Vehicle.RefuelVehicle(i_FuelType, i_FuelAmountToFill);
+            }
 
             return vehicleFound;
         }
@@ -53,14 +76,25 @@ namespace Ex03.GarageLogic
         public bool ChargeVehicleByLicenseNumber(string i_LicenseNumber, float i_MinutesToCharge)
         {
             bool vehicleFound = IsVehicleInGarage(i_LicenseNumber);
-            // if yes...
+            if(vehicleFound)
+            {
+                m_GarageVehicles[i_LicenseNumber].Vehicle.ChargeVehicle(i_MinutesToCharge);
+            }
 
             return vehicleFound;
         }
 
-        public void/***/ GetVehicleFullDetailsByLicenseNumber(string i_LicenseNumber)
+        public List<string> GetVehicleFullDetailsByLicenseNumber(string i_LicenseNumber)
         {
-            //return needs to be the details somehow... maybe some sort of form as a struct?
+            GarageVehicle.DetailsForm vehicleFullDetails = new List<string>();
+            bool vehicleFound = IsVehicleInGarage(i_LicenseNumber);
+            if(vehicleFound)
+            {
+                //vehicleFullDetails = m_GarageVehicles[i_LicenseNumber].GetFullDetails();
+                //still not sure hot to return this. struct? becase maybe list of strings is too "specific"
+            }
+            //if not found - throw exception? or - output parameter? maybe the list as output (similar to tryParse...)
+            return vehicleFullDetails;
         }
     }
 }
