@@ -17,7 +17,7 @@ namespace Ex03.GarageLogic
         private const float k_MaxTirePressure = 29;
         private const int k_ParametersRequiredForFullCreation = 2;
 
-        public enum eColor
+        internal enum eColor
         {
             Red,
             White,
