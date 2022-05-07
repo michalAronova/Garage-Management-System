@@ -10,7 +10,7 @@ namespace Ex03.ConsoleUI
     public class GarageUserInterface
     {
         private const string k_invalidInputMessage = "Invalid input! Please try again:";
-        private Garage m_Garage = new Garage(); //maybe readonly?
+        private readonly Garage m_Garage = new Garage();
         private readonly VehicleCreator r_VehicleCreator = new VehicleCreator();
 
         private int getUserChoice(Array i_EnumArray, string i_OptionRequired)
@@ -91,6 +91,7 @@ namespace Ex03.ConsoleUI
         private float getUnsigedFloatFromUser(string i_Message)
         {
             float input;
+
             Console.WriteLine("Please enter " + i_Message + ":");
             while (!float.TryParse(Console.ReadLine(), out input) || input < 0)
             {
@@ -155,13 +156,31 @@ namespace Ex03.ConsoleUI
 
         public void StartSystem()
         {
-            int serviceChoice;
+            int? serviceChoice = null;
 
             printWelcomeMessage();
             do
             {
-                serviceChoice = getUserChoice(Enum.GetValues(typeof(eServiceOption)), "service");
-                runService((eServiceOption)serviceChoice);
+                try
+                {
+                    serviceChoice = getUserChoice(Enum.GetValues(typeof(eServiceOption)), "service");
+                    runService((eServiceOption)serviceChoice);
+                    Console.WriteLine("Service completed :)");
+                }
+                catch (FormatException i_FormatExeption)
+                {
+                    Console.WriteLine(i_FormatExeption.Message);
+                }
+                catch (ValueOutOfRangeException i_ValueOutOfRangeException)
+                {
+                    Console.WriteLine(i_ValueOutOfRangeException.Message);
+                }
+                catch (ArgumentException i_ArgumentException)
+                {
+                    Console.WriteLine(i_ArgumentException.Message);
+                }
+
+                System.Threading.Thread.Sleep(3000);
             } while (serviceChoice != (int)eServiceOption.ExitSystem);
         }
 
@@ -225,9 +244,10 @@ namespace Ex03.ConsoleUI
         private void createAndEnterNewGarageVehicle(string i_LicenseNumber, VehicleCreator.eVehicleType i_VehicleType)
         {
             Vehicle newVehicle = createVehicleAndEnterParams(i_LicenseNumber, i_VehicleType);
-            GarageVehicle newGarageVehicle;
-            string ownerName = "roni", ownerPhoneNumber = "6969";
-            //getOwnerDetails(out ownerName, out ownerPhoneNumber);
+            GarageVehicle newGarageVehicle = null;
+            string ownerName = null, ownerPhoneNumber = null;
+
+            getOwnerDetails(out ownerName, out ownerPhoneNumber);
             newGarageVehicle = new GarageVehicle(newVehicle, ownerName, ownerPhoneNumber);
             m_Garage.EnterNewVehicle(newGarageVehicle);
         }
@@ -237,6 +257,7 @@ namespace Ex03.ConsoleUI
             List<Param> requiredParams;
             Vehicle newVehicle = r_VehicleCreator.CreateVehicle(i_LicenseNumber, i_VehicleType, out requiredParams);
             List<Object> enteredParams = getParamsFromUser(requiredParams);
+
             newVehicle.FillParams(enteredParams.ToList());
 
             return newVehicle;
@@ -265,9 +286,10 @@ namespace Ex03.ConsoleUI
                             parameters.Add(parseMethod.Invoke(null, new Object[] { curr }));
                             paramIsNotValid = !true;
                         }
-                        catch (FormatException exception)
+                        catch (TargetInvocationException i_TargetInvocationException)
                         {
-                            Console.WriteLine(k_invalidInputMessage);
+                            Console.WriteLine("Invalid {0}. Please try again", parameter.Name);
+                            curr = Console.ReadLine();
                         }
                     }
 
@@ -282,10 +304,29 @@ namespace Ex03.ConsoleUI
             return parameters;
         }
 
-        //private void getOwnerDetails(out string i_OwnerName, out string i_OwnerPhoneNumber)
-        //{
+        private void getOwnerDetails(out string i_OwnerName, out string i_OwnerPhoneNumber)
+        {
+            Console.WriteLine("Please enter owner's name:");
+            i_OwnerName = Console.ReadLine();
+            while (!i_OwnerName.All(isLetterOrWhiteSpace))
+            {
+                Console.WriteLine(k_invalidInputMessage);
+                i_OwnerName = Console.ReadLine();
+            }
 
-        //}
+            Console.WriteLine("Please enter owner's phone number:");
+            i_OwnerPhoneNumber = Console.ReadLine();
+            while (!i_OwnerPhoneNumber.All(char.IsDigit))
+            {
+                Console.WriteLine(k_invalidInputMessage);
+                i_OwnerPhoneNumber = Console.ReadLine();
+            }
+        }
+
+        private bool isLetterOrWhiteSpace(char i_CharToCheck)
+        {
+            return (char.IsLetter(i_CharToCheck)) || (char.IsWhiteSpace(i_CharToCheck));
+        }
 
         private void showAllLicenseNumbers()
         {
@@ -334,7 +375,7 @@ namespace Ex03.ConsoleUI
             FuelEngine.eFuelType fuelType = (FuelEngine.eFuelType)getUserChoice(Enum.GetValues(typeof(FuelEngine.eFuelType)), "fuel type");
             float amountToFuel = getUnsigedFloatFromUser("amount to fuel");
             bool vehicleFound = m_Garage.RefuelVehicleTankByLicenseNumber(licenseNumber, fuelType, amountToFuel);
-            //exeption from logic
+
             printResult("Vehicle tank filled successfully", vehicleFound, licenseNumber);
         }
 
@@ -343,7 +384,7 @@ namespace Ex03.ConsoleUI
             string licenseNumber = getValidLicenseNumber();
             float amountToCharge = getUnsigedFloatFromUser("amount to charge");
             bool vehicleFound = m_Garage.ChargeVehicleByLicenseNumber(licenseNumber, amountToCharge);
-            //exeption from logic
+
             printResult("Vehicle charged successfully", vehicleFound, licenseNumber);
         }
 
@@ -351,8 +392,9 @@ namespace Ex03.ConsoleUI
         {
             string licenseNumber = getValidLicenseNumber();
 
-            m_Garage.GetVehicleFullDetailsByLicenseNumber(licenseNumber);
-            //continue..
+            Console.WriteLine(m_Garage.GetVehicleFullDetailsByLicenseNumber(licenseNumber));
+            Console.WriteLine("Insert any key to continue");
+            Console.ReadLine();
         }
     }
 }

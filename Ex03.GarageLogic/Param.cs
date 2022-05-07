@@ -22,6 +22,7 @@ namespace Ex03.GarageLogic
                 return r_ParamName;
             }
         }
+
         public string Requirements
         {
             get
@@ -29,6 +30,7 @@ namespace Ex03.GarageLogic
                 return r_ParamRequirements;
             }
         }
+
         public Type Type
         {
             get

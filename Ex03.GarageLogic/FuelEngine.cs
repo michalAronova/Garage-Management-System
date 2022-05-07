@@ -30,13 +30,6 @@ namespace Ex03.GarageLogic
 
             base.FillEnergy(i_FuelAmount);
         }
-        public override List<string> GetDetails() //////////?????
-        {
-            List<string> details = new List<string>();
-            details.Add(string.Format("Current fuel amount: {0}", base.CurrentEnergy));
-            details.Add(r_FuelType.ToString());
-            return details;
-        }
 
         public override eEngineType EngineType
         {
@@ -44,6 +37,16 @@ namespace Ex03.GarageLogic
             {
                 return eEngineType.Fuel;
             }
+        }
+
+        public override string ToString()
+        {
+            string fuelData = string.Format(
+@"Fuel Type: {0}
+Current amount of fuel: {1}
+Max amount of fuel: {2}", r_FuelType.ToString(), base.CurrentEnergy, base.MaxEnergy);
+
+            return fuelData;
         }
     }
 }

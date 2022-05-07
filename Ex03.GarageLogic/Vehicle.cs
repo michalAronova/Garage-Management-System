@@ -1,23 +1,21 @@
 ﻿using System;
+using System.Text;
 using System.Collections.Generic;
-using System.Security.Cryptography;
 
 namespace Ex03.GarageLogic
 {
     public abstract class Vehicle
     {
-        private const int   k_ParametersRequiredForFullCreation = 3;
-
+        private const int k_ParametersRequiredForFullCreation = 3;
         private readonly string r_LicenseNumber;
         private readonly List<Tire> r_Tires;
         private string m_ModelName;
-        protected Engine m_Engine; // readonly
-
+        protected Engine m_Engine;
 
         public Vehicle(string i_LicenseNumber, int i_NumberOfTires)
         {
             r_LicenseNumber = i_LicenseNumber;
-            r_Tires = new List<Tire>(i_NumberOfTires);
+            r_Tires = new List<Tire>(new Tire[i_NumberOfTires]);
         }
 
         public virtual void CreateTires(float i_MaxAirPressure)
@@ -27,6 +25,7 @@ namespace Ex03.GarageLogic
                 r_Tires[i] = new Tire(i_MaxAirPressure);
             }
         }
+
         private void setManufacturerAllTires(string i_ManufacturerName)
         {
             foreach (Tire tire in r_Tires)
@@ -41,6 +40,7 @@ namespace Ex03.GarageLogic
             {
                 throw new ArgumentException("Cannot refuel an electric vehicle!");
             }
+
             (m_Engine as FuelEngine).Refuel(i_FuelType, i_FuelAmount); 
         }
 
@@ -50,6 +50,7 @@ namespace Ex03.GarageLogic
             {
                 throw new ArgumentException("Cannot charge a fuel vehicle!");
             }
+
             (m_Engine as ElectricEngine).Charge(i_MinutesToCharge);
         }
 
@@ -68,10 +69,6 @@ namespace Ex03.GarageLogic
                 tire.Inflate(i_AirPressureToInflateWith);
             }
         }
-        public void InflateByTire(int i_TireToInflate, float i_AirPressureToInflateWith)
-        {
-            r_Tires[i_TireToInflate].Inflate(i_AirPressureToInflateWith);
-        }
 
         public virtual List<Param> GetParametersRequired()
         {
@@ -84,7 +81,6 @@ namespace Ex03.GarageLogic
 
             return paramsRequired;
         }
-
 
         public string LicenseNumber
         {
@@ -126,40 +122,20 @@ namespace Ex03.GarageLogic
             }
         }
 
-        public virtual List<string> GetDetails() //////////?????
-        {
-            ///private readonly string r_LicenseNumber;
-            ///private readonly List<Tire> r_Tires;
-            ///private string m_ModelName;
-            ///protected Engine m_Engine;
-            List<string> details = new List<string>();
-            details.Add(string.Format(""));
-            
-            return details;
-        }
-
-        ///private string getAllTiresDetails()
-        ///{
-        ///    List<string> allTiresDetails = new List<string>();
-        ///    int tireNum = 1;
-        ///    foreach(Tire tire in r_Tires)
-        ///    {
-        ///        allTiresDetails.Add(string.Format("Tire "));
-        ///    }
-        ///}
-        public override bool Equals(object obj)
-        {
-            return base.Equals(obj);
-        }
-
-        public override int GetHashCode()
-        {
-            return base.GetHashCode();
-        }
-
         public override string ToString()
         {
-            return base.ToString();
+            string tiresData = r_Tires[0].ToString();
+            string vehicleData = null;
+
+            vehicleData = string.Format(
+@"License Number: {0}
+Model name: {1}
+Tires info:
+{2}
+Engine info:
+{3}", r_LicenseNumber, m_ModelName, tiresData, m_Engine.ToString());
+
+            return vehicleData;
         }
     }
 }

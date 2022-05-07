@@ -19,11 +19,13 @@ namespace Ex03.GarageLogic
             }
         }
 
-        public override List<string> GetDetails() //////////?????
+        public override string ToString()
         {
-            List<string> details = new List<string>();
-            details.Add(string.Format("Current charge: {0}", base.CurrentEnergy));
-            return details;
+            string electricityData = string.Format(
+@"Battery time left in hours: {0}
+Max battery time in hours: {1}", base.CurrentEnergy, base.MaxEnergy);
+
+            return electricityData;
         }
     }
 }

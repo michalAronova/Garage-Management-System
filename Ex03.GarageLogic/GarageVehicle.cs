@@ -9,15 +9,6 @@ namespace Ex03.GarageLogic
         private readonly string r_OwnerPhoneNumber;
         private eVehicleStatus m_VehicleStatus = eVehicleStatus.InFix;
 
-        //below is possible solution to the get all details in garage
-        public struct DetailsForm //a lot of code duplication :(
-        {
-            private string m_OwnerName;
-            private string m_OwnerPhoneNumber;
-            private eVehicleStatus m_VehicleStatus;
-            //private VehicleDetails m_VehicleDetails;
-        }
-
         public enum eVehicleStatus
         {
             InFix,
@@ -32,15 +23,6 @@ namespace Ex03.GarageLogic
             r_OwnerPhoneNumber = i_OwnerPhoneNumber;
         }
 
-        public List<string> GetFullDetails() //////////?????
-        {
-            List<string> fullDetails = new List<string>();
-            fullDetails.Add(string.Format("Owner name: {0}", r_OwnerName));
-            fullDetails.Add(string.Format("Owner phone number: {0}", r_OwnerPhoneNumber));
-            fullDetails.AddRange(r_Vehicle.GetDetails());
-            return fullDetails;
-        }
-
         public string LicenseNumber
         {
             get
@@ -48,6 +30,7 @@ namespace Ex03.GarageLogic
                 return r_Vehicle.LicenseNumber;
             }
         }
+
         public Vehicle Vehicle
         {
             get
@@ -66,6 +49,17 @@ namespace Ex03.GarageLogic
             {
                 m_VehicleStatus = value;
             }
+        }
+
+        public override string ToString()
+        {
+            string fullData = string.Format(
+@"Owner name: {0}
+Owner phone number: {1}
+Vehicle state: {2}
+{3}", r_OwnerName, r_OwnerPhoneNumber, m_VehicleStatus.ToString(), r_Vehicle.ToString());
+
+            return fullData;
         }
     }
 }

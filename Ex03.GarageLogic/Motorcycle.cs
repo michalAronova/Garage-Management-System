@@ -12,6 +12,8 @@ namespace Ex03.GarageLogic
         private const float k_MaxBatteryTime = 2.5f;
         private const float k_MaxTirePressure = 31;
         private const int k_ParametersRequiredForFullCreation = 2;
+        private eLicenseType m_LicenseType;
+        private float m_EngineVolume;
 
         enum eLicenseType
         {
@@ -20,9 +22,6 @@ namespace Ex03.GarageLogic
             B1,
             B2
         }
-
-        private eLicenseType m_LicenseType;
-        private float m_EngineVolume;
 
         public Motorcycle(string i_LicenseNumber, Engine.eEngineType i_EngineType) : base(i_LicenseNumber, k_TireNumber)
         {
@@ -40,7 +39,7 @@ namespace Ex03.GarageLogic
             List<Param> allRequiredParams = new List<Param>();
             string[] options = Enum.GetNames(typeof(eLicenseType));
 
-            allRequiredParams.Add(new Param("License type", string.Join(", ",options), typeof(string)));
+            allRequiredParams.Add(new Param("License type", string.Join(", ",options), typeof(eLicenseType)));
             allRequiredParams.Add(new Param("Engine volume", "number", typeof(float)));
             allRequiredParams.AddRange(base.GetParametersRequired());
 
@@ -52,10 +51,12 @@ namespace Ex03.GarageLogic
             string licenseType = i_Parameters[0] as string;
             float engineVolume = (float)i_Parameters[1];
             bool ableToParse = Enum.TryParse(licenseType, true, out m_LicenseType);
+
             if (!ableToParse)
             {
-                throw new ArgumentException(string.Format("{0} is not a valid license type", licenseType));
+                throw new FormatException(string.Format("{0} is not a valid license type", licenseType));
             }
+
             if (engineVolume < 0)
             {
                 throw new ArgumentException("Engine volume may not be negative");
@@ -63,6 +64,19 @@ namespace Ex03.GarageLogic
 
             m_EngineVolume = engineVolume;
             base.FillParams(i_Parameters.GetRange(k_ParametersRequiredForFullCreation, i_Parameters.Count - k_ParametersRequiredForFullCreation));
+        }
+
+        public override string ToString()
+        {
+            string motorcycleData = string.Format(
+@"{0}
+License type: {1}
+Engine capacity: {2}",
+base.ToString(),
+m_LicenseType.ToString(),
+m_EngineVolume);
+
+            return motorcycleData;
         }
     }
 }

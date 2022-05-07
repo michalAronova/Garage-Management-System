@@ -11,7 +11,6 @@ namespace Ex03.GarageLogic
         private const float k_MaxFuelTank = 120f;
         private const float k_MaxTirePressure = 24;
         private const int   k_ParametersRequiredForFullCreation = 2;
-
         private bool m_Refrigerating;
         private float m_CargoVolume;
 
@@ -34,16 +33,29 @@ namespace Ex03.GarageLogic
 
         public override void FillParams(List<object> i_Parameters)
         {
-            //assuming UI will make sure I get a boolean for the refrigiration
-            //and get float for cargo volume -> there is no limit so only check that it is not negative basically
             m_Refrigerating = (bool)i_Parameters[0];
             float cargoVolume = (float)i_Parameters[1];
+
             if(cargoVolume < 0)
             {
                 throw new ArgumentException("Cargo volume may not be negative");
             }
+
             m_CargoVolume = cargoVolume;
             base.FillParams(i_Parameters.GetRange(k_ParametersRequiredForFullCreation, i_Parameters.Count - k_ParametersRequiredForFullCreation));
+        }
+
+        public override string ToString()
+        {
+            string truckData = string.Format(
+@"{0}
+Is carrying dangerous materials: {1}
+Volume of cargo: {2}",
+base.ToString(),
+m_Refrigerating,
+m_CargoVolume);
+
+            return truckData;
         }
     }
 }

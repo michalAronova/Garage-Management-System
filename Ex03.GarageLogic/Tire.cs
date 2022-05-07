@@ -71,5 +71,17 @@ namespace Ex03.GarageLogic
             }
         }
 
+        public override string ToString()
+        {
+            string tireData = string.Format(
+@"Manufacturer name: {0}
+Current air pressure: {1}
+Max air pressure: {2}",
+m_ManufacturerName,
+m_CurrentAirPressure,
+r_MaxAirPressure);
+
+            return tireData;
+        }
     }
 }
