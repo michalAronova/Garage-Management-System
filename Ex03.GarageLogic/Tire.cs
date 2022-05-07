@@ -19,11 +19,12 @@ namespace Ex03.GarageLogic
         public void Inflate(float i_AirToInflateWith)
         {
             float newAirPressure = m_CurrentAirPressure + i_AirToInflateWith;
-            string errorMessage;
+            string errorMessage = null;
 
             if(newAirPressure > r_MaxAirPressure)
             {
-                errorMessage = string.Format("Request exceeds inflation bound. Current amount of air pressure is {0}. Air pressure must be between" , m_CurrentAirPressure);
+                errorMessage = string.Format("Request exceeds inflation bound. Current amount of air pressure is {0}. " +
+                    "Air pressure must be between {1} and {2}.", m_CurrentAirPressure, k_MinAirPressure, r_MaxAirPressure);
                 throw new ValueOutOfRangeException(errorMessage, r_MaxAirPressure, k_MinAirPressure);
             }
 
