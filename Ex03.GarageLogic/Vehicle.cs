@@ -9,6 +9,7 @@ namespace Ex03.GarageLogic
         private const int k_ParametersRequiredForFullCreation = 3;
         private readonly string r_LicenseNumber;
         private readonly List<Tire> r_Tires;
+        private float m_CurrentEnergyPercentage;
         private string m_ModelName;
         protected Engine m_Engine;
 
@@ -41,7 +42,8 @@ namespace Ex03.GarageLogic
                 throw new ArgumentException("Cannot refuel an electric vehicle!");
             }
 
-            (m_Engine as FuelEngine).Refuel(i_FuelType, i_FuelAmount); 
+            (m_Engine as FuelEngine).Refuel(i_FuelType, i_FuelAmount);
+            updateEnergyPercentage();
         }
 
         public void ChargeVehicle(float i_MinutesToCharge)
@@ -52,6 +54,7 @@ namespace Ex03.GarageLogic
             }
 
             (m_Engine as ElectricEngine).Charge(i_MinutesToCharge);
+            updateEnergyPercentage();
         }
 
         public void InflateAllToMax()
@@ -98,6 +101,19 @@ namespace Ex03.GarageLogic
             }
         }
 
+        public float CurrentEnergyPercentage
+        {
+            get
+            {
+                return m_CurrentEnergyPercentage;
+            }
+        }
+
+        private void updateEnergyPercentage()
+        {
+            m_CurrentEnergyPercentage = (m_Engine.CurrentEnergy * 100) / m_Engine.MaxEnergy;
+        }
+
         public virtual void FillParams(List<object> i_Parameters)
         {
             float energyInEngine = (float)i_Parameters[1];
@@ -106,6 +122,7 @@ namespace Ex03.GarageLogic
 
             m_ModelName = i_Parameters[0] as string;
             m_Engine.FillEnergy(energyInEngine);
+            updateEnergyPercentage();
             setManufacturerAllTires(manufacturerName);
             InflateAllTires(tirePressure);
         }
