@@ -172,17 +172,9 @@ namespace Ex03.ConsoleUI
                         Console.ReadLine();
                     }
                 }
-                catch (FormatException i_FormatExeption)
+                catch (Exception i_Exeption)
                 {
-                    Console.WriteLine(i_FormatExeption.Message);
-                }
-                catch (ValueOutOfRangeException i_ValueOutOfRangeException)
-                {
-                    Console.WriteLine(i_ValueOutOfRangeException.Message);
-                }
-                catch (ArgumentException i_ArgumentException)
-                {
-                    Console.WriteLine(i_ArgumentException.Message);
+                    Console.WriteLine(i_Exeption.Message);
                 }
             } while (serviceChoice != (int)eServiceOption.ExitSystem);
         }
