@@ -385,7 +385,7 @@ namespace Ex03.ConsoleUI
         {
             string licenseNumber = getValidLicenseNumber();
 
-            Console.WriteLine(m_Garage.GetVehicleFullDetailsByLicenseNumber(licenseNumber));
+            Console.WriteLine(r_Garage.GetVehicleFullDetailsByLicenseNumber(licenseNumber));
         }
     }
 }
