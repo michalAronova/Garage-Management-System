@@ -18,7 +18,7 @@ namespace Ex03.ConsoleUI
             string menu = "Please choose number of " + i_OptionRequired + " wanted:";
             int userChoice;
 
-            Ex02.ConsoleUtils.Screen.Clear();
+            Console.Clear();
             Console.WriteLine(menu);
             printUserOptions(i_EnumArray);
             userChoice = getUserChoice(i_EnumArray.Length, i_OptionRequired);
@@ -166,6 +166,11 @@ namespace Ex03.ConsoleUI
                     serviceChoice = getUserChoice(Enum.GetValues(typeof(eServiceOption)), "service");
                     runService((eServiceOption)serviceChoice);
                     Console.WriteLine("Service completed :)");
+                    if((eServiceOption)serviceChoice != eServiceOption.ExitSystem)
+                    {
+                        Console.WriteLine("Press Enter to continue");
+                        Console.ReadLine();
+                    }
                 }
                 catch (FormatException i_FormatExeption)
                 {
@@ -179,8 +184,6 @@ namespace Ex03.ConsoleUI
                 {
                     Console.WriteLine(i_ArgumentException.Message);
                 }
-
-                System.Threading.Thread.Sleep(3000);
             } while (serviceChoice != (int)eServiceOption.ExitSystem);
         }
 
@@ -382,9 +385,7 @@ namespace Ex03.ConsoleUI
         {
             string licenseNumber = getValidLicenseNumber();
 
-            Console.WriteLine(r_Garage.GetVehicleFullDetailsByLicenseNumber(licenseNumber));
-            Console.WriteLine("Insert any key to continue");
-            Console.ReadLine();
+            Console.WriteLine(m_Garage.GetVehicleFullDetailsByLicenseNumber(licenseNumber));
         }
     }
 }

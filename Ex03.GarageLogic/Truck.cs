@@ -49,7 +49,7 @@ namespace Ex03.GarageLogic
         {
             string truckData = string.Format(
 @"{0}
-Is carrying dangerous materials: {1}
+Is refrigerating: {1}
 Volume of cargo: {2}",
 base.ToString(),
 m_Refrigerating,
