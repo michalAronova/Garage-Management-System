@@ -9,7 +9,7 @@ namespace Ex03.ConsoleUI
 {
     public class GarageUserInterface
     {
-        private const string k_invalidInputMessage = "Invalid input! Please try again:";
+        private const string k_InvalidInputMessage = "Invalid input! Please try again:";
         private readonly Garage r_Garage = new Garage();
         private readonly VehicleCreator r_VehicleCreator = new VehicleCreator();
 
@@ -81,21 +81,21 @@ namespace Ex03.ConsoleUI
 
             while (input != "Y" && input != "N")
             {
-                Console.WriteLine(k_invalidInputMessage);
+                Console.WriteLine(k_InvalidInputMessage);
                 input = Console.ReadLine();
             }
 
             return input == "Y";
         }
 
-        private float getUnsigedFloatFromUser(string i_Message)
+        private float getUnsignedFloatFromUser(string i_Message)
         {
             float input;
 
             Console.WriteLine("Please enter " + i_Message + ":");
             while (!float.TryParse(Console.ReadLine(), out input) || input < 0)
             {
-                Console.WriteLine(k_invalidInputMessage);
+                Console.WriteLine(k_InvalidInputMessage);
             }
             
             return input;
@@ -115,7 +115,7 @@ namespace Ex03.ConsoleUI
             bool validInput = true;
             int licenseNumberLength = 0;
 
-            Console.WriteLine("Please enter licence number (1 to 8 numbers):");
+            Console.WriteLine("Please enter license number (1 to 8 numbers):");
             do
             {
                 licenseNumber = Console.ReadLine();
@@ -128,7 +128,7 @@ namespace Ex03.ConsoleUI
 
                 if (!validInput)
                 {
-                    Console.WriteLine(k_invalidInputMessage);
+                    Console.WriteLine(k_InvalidInputMessage);
                 }
             } while (!validInput);
 
@@ -172,9 +172,9 @@ namespace Ex03.ConsoleUI
                         Console.ReadLine();
                     }
                 }
-                catch (Exception i_Exeption)
+                catch (Exception i_Exception)
                 {
-                    Console.WriteLine(i_Exeption.Message);
+                    Console.WriteLine(i_Exception.Message);
                 }
             } while (serviceChoice != (int)eServiceOption.ExitSystem);
         }
@@ -295,7 +295,7 @@ namespace Ex03.ConsoleUI
             i_OwnerName = Console.ReadLine();
             while (!i_OwnerName.All(isLetterOrWhiteSpace))
             {
-                Console.WriteLine(k_invalidInputMessage);
+                Console.WriteLine(k_InvalidInputMessage);
                 i_OwnerName = Console.ReadLine();
             }
 
@@ -303,7 +303,7 @@ namespace Ex03.ConsoleUI
             i_OwnerPhoneNumber = Console.ReadLine();
             while (!i_OwnerPhoneNumber.All(char.IsDigit))
             {
-                Console.WriteLine(k_invalidInputMessage);
+                Console.WriteLine(k_InvalidInputMessage);
                 i_OwnerPhoneNumber = Console.ReadLine();
             }
         }
@@ -358,7 +358,7 @@ namespace Ex03.ConsoleUI
         {
             string licenseNumber = getValidLicenseNumber();
             FuelEngine.eFuelType fuelType = (FuelEngine.eFuelType)getUserChoice(Enum.GetValues(typeof(FuelEngine.eFuelType)), "fuel type");
-            float amountToFuel = getUnsigedFloatFromUser("amount to fuel");
+            float amountToFuel = getUnsignedFloatFromUser("amount to fuel");
             bool vehicleFound = r_Garage.RefuelVehicleTankByLicenseNumber(licenseNumber, fuelType, amountToFuel);
 
             printResult("Vehicle tank filled successfully", vehicleFound, licenseNumber);
@@ -367,7 +367,7 @@ namespace Ex03.ConsoleUI
         private void chargeVehicle()
         {
             string licenseNumber = getValidLicenseNumber();
-            float amountToCharge = getUnsigedFloatFromUser("amount to charge");
+            float amountToCharge = getUnsignedFloatFromUser("amount to charge");
             bool vehicleFound = r_Garage.ChargeVehicleByLicenseNumber(licenseNumber, amountToCharge);
 
             printResult("Vehicle charged successfully", vehicleFound, licenseNumber);

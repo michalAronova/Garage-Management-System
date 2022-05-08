@@ -13,7 +13,7 @@ namespace Ex03.GarageLogic
         private const float k_MaxTirePressure = 31;
         private const int k_ParametersRequiredForFullCreation = 2;
         private eLicenseType m_LicenseType;
-        private float m_EngineVolume;
+        private int m_EngineVolume;
 
         internal enum eLicenseType
         {
@@ -40,7 +40,7 @@ namespace Ex03.GarageLogic
             string[] options = Enum.GetNames(typeof(eLicenseType));
 
             allRequiredParams.Add(new Param("License type", string.Join(", ",options), typeof(eLicenseType)));
-            allRequiredParams.Add(new Param("Engine volume", "number", typeof(float)));
+            allRequiredParams.Add(new Param("Engine volume", "number", typeof(int)));
             allRequiredParams.AddRange(base.GetParametersRequired());
 
             return allRequiredParams;
@@ -49,7 +49,7 @@ namespace Ex03.GarageLogic
         public override void FillParams(List<object> i_Parameters)
         {
             string licenseType = i_Parameters[0] as string;
-            float engineVolume = (float)i_Parameters[1];
+            int engineVolume = (int)i_Parameters[1];
             bool ableToParse = Enum.TryParse(licenseType, true, out m_LicenseType);
 
             if (!ableToParse)
