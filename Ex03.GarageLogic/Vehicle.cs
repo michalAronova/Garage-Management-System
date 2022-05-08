@@ -11,7 +11,7 @@ namespace Ex03.GarageLogic
         private string m_ModelName = null;
         protected Engine m_Engine = null;
 
-        public Vehicle(string i_LicenseNumber, int i_NumberOfTires, float i_MaxAirPressure)
+        protected Vehicle(string i_LicenseNumber, int i_NumberOfTires, float i_MaxAirPressure)
         {
             r_LicenseNumber = i_LicenseNumber;
             r_Tires = new List<Tire>(new Tire[i_NumberOfTires]);
