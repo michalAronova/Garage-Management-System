@@ -25,7 +25,7 @@ namespace Ex03.GarageLogic
         {
             if(i_FuelType != r_FuelType)
             {
-                throw new ArgumentException("Incorrect fuel Type!");
+                throw new ArgumentException(string.Format("Incorrect fuel Type! {0} needed.", r_FuelType.ToString()));
             }
 
             base.FillEnergy(i_FuelAmount);

@@ -6,14 +6,14 @@ namespace Ex03.GarageLogic
 {
     public class Motorcycle : Vehicle
     {
+        private eLicenseType m_LicenseType;
+        private int m_EngineVolume;
         private const int k_TireNumber = 2;
         private const FuelEngine.eFuelType k_FuelType = FuelEngine.eFuelType.Octan98;
         private const float k_MaxFuelTank = 6.2f;
         private const float k_MaxBatteryTime = 2.5f;
         private const float k_MaxTirePressure = 31;
         private const int k_ParametersRequiredForFullCreation = 2;
-        private eLicenseType m_LicenseType;
-        private int m_EngineVolume;
 
         internal enum eLicenseType
         {
@@ -23,10 +23,9 @@ namespace Ex03.GarageLogic
             B2
         }
 
-        public Motorcycle(string i_LicenseNumber, Engine.eEngineType i_EngineType) : base(i_LicenseNumber, k_TireNumber)
+        public Motorcycle(string i_LicenseNumber, Engine.eEngineType i_EngineType) : base(i_LicenseNumber, k_TireNumber, k_MaxTirePressure)
         {
             createEngineByType(i_EngineType);
-            base.CreateTires(k_MaxTirePressure);
         }
 
         private void createEngineByType(Engine.eEngineType i_EngineType)

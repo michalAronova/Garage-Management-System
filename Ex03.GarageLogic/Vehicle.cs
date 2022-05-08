@@ -9,17 +9,18 @@ namespace Ex03.GarageLogic
         private const int k_ParametersRequiredForFullCreation = 3;
         private readonly string r_LicenseNumber;
         private readonly List<Tire> r_Tires;
-        private float m_CurrentEnergyPercentage;
-        private string m_ModelName;
-        protected Engine m_Engine;
+        private float m_CurrentEnergyPercentage = 0;
+        private string m_ModelName = null;
+        protected Engine m_Engine = null;
 
-        public Vehicle(string i_LicenseNumber, int i_NumberOfTires)
+        public Vehicle(string i_LicenseNumber, int i_NumberOfTires, float i_MaxAirPressure)
         {
             r_LicenseNumber = i_LicenseNumber;
             r_Tires = new List<Tire>(new Tire[i_NumberOfTires]);
+            CreateTires(i_MaxAirPressure);
         }
 
-        public virtual void CreateTires(float i_MaxAirPressure)
+        private void CreateTires(float i_MaxAirPressure)
         {
             for (int i = 0; i < r_Tires.Count; i++)
             {
@@ -80,7 +81,7 @@ namespace Ex03.GarageLogic
             paramsRequired.Add(new Param("Model name", "letters and numbers", typeof(string)));
             paramsRequired.Add(new Param("Energy in engine", string.Format("{0} - {1}", m_Engine.MinEnergy, m_Engine.MaxEnergy), typeof(float)));
             paramsRequired.Add(new Param("Tires manufacturer", "letters and numbers", typeof(string)));
-            paramsRequired.Add(new Param("Current tire air pressure in all tires", "numbers", typeof(float)));
+            paramsRequired.Add(new Param("Current tire air pressure in all tires", string.Format("{0} - {1}", r_Tires[0].MinAirPressure, r_Tires[0].MaxAirPressure), typeof(float)));
 
             return paramsRequired;
         }

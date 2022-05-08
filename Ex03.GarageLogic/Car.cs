@@ -25,10 +25,9 @@ namespace Ex03.GarageLogic
             Blue
         }
 
-        public Car(string i_LicenseNumber, Engine.eEngineType i_EngineType) : base(i_LicenseNumber, k_TireNumber)
+        public Car(string i_LicenseNumber, Engine.eEngineType i_EngineType) : base(i_LicenseNumber, k_TireNumber, k_MaxTirePressure)
         {
             createEngineByType(i_EngineType);
-            base.CreateTires(k_MaxTirePressure);
         }
 
         public override List<Param> GetParametersRequired()

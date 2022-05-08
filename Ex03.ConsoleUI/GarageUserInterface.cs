@@ -166,15 +166,17 @@ namespace Ex03.ConsoleUI
                     serviceChoice = getUserChoice(Enum.GetValues(typeof(eServiceOption)), "service");
                     runService((eServiceOption)serviceChoice);
                     Console.WriteLine("Service completed :)");
-                    if((eServiceOption)serviceChoice != eServiceOption.ExitSystem)
-                    {
-                        Console.WriteLine("Press Enter to continue");
-                        Console.ReadLine();
-                    }
                 }
-                catch (Exception i_Exception)
+                catch (Exception exception)
                 {
-                    Console.WriteLine(i_Exception.Message);
+                    Console.WriteLine(exception.Message);
+                    Console.WriteLine("Press Enter to continue");
+                }
+
+                if((eServiceOption)serviceChoice != eServiceOption.ExitSystem)
+                {
+                    Console.WriteLine("Press Enter to continue");
+                    Console.ReadLine();
                 }
             } while (serviceChoice != (int)eServiceOption.ExitSystem);
         }
@@ -242,8 +244,24 @@ namespace Ex03.ConsoleUI
             List<Param> requiredParams;
             Vehicle newVehicle = r_VehicleCreator.CreateVehicle(i_LicenseNumber, i_VehicleType, out requiredParams);
             List<Object> enteredParams = getParamsFromUser(requiredParams);
-
-            newVehicle.FillParams(enteredParams.ToList());
+            bool allValidParams = false;
+            do
+            {
+                try
+                {
+                    newVehicle.FillParams(enteredParams.ToList());
+                    allValidParams = true;
+                }
+                catch(Exception exception)
+                {
+                    allValidParams = false;
+                    Console.WriteLine(exception.Message);
+                    Console.WriteLine("Please try again");
+                    System.Threading.Thread.Sleep(3000);
+                    enteredParams = getParamsFromUser(requiredParams);
+                }
+            }
+            while(!allValidParams);
 
             return newVehicle;
         }
@@ -271,7 +289,7 @@ namespace Ex03.ConsoleUI
                             parameters.Add(parseMethod.Invoke(null, new Object[] { curr }));
                             paramIsNotValid = !true;
                         }
-                        catch (TargetInvocationException i_TargetInvocationException)
+                        catch (TargetInvocationException targetInvocationException)
                         {
                             Console.WriteLine("Invalid {0}. Please try again", parameter.Name);
                             curr = Console.ReadLine();
@@ -359,7 +377,33 @@ namespace Ex03.ConsoleUI
             string licenseNumber = getValidLicenseNumber();
             FuelEngine.eFuelType fuelType = (FuelEngine.eFuelType)getUserChoice(Enum.GetValues(typeof(FuelEngine.eFuelType)), "fuel type");
             float amountToFuel = getUnsignedFloatFromUser("amount to fuel");
-            bool vehicleFound = r_Garage.RefuelVehicleTankByLicenseNumber(licenseNumber, fuelType, amountToFuel);
+            bool vehicleFound = false, validAmount = false, validFuel = false;
+            do
+            {
+                try
+                {
+                    vehicleFound = r_Garage.RefuelVehicleTankByLicenseNumber(licenseNumber, fuelType, amountToFuel);
+                    validAmount = true;
+                    validFuel = true;
+                }
+                catch(ArgumentException argumentException)
+                {
+                    validFuel = false;
+                    Console.WriteLine(argumentException.Message);
+                    Console.WriteLine("Please try again");
+                    System.Threading.Thread.Sleep(3000);
+                    fuelType = (FuelEngine.eFuelType)getUserChoice(Enum.GetValues(typeof(FuelEngine.eFuelType)), "fuel type");
+                }
+                catch (ValueOutOfRangeException outOfRangeException)
+                {
+                    validAmount = false;
+                    Console.WriteLine(outOfRangeException.Message);
+                    Console.WriteLine("Please try again");
+                    System.Threading.Thread.Sleep(3000);
+                    amountToFuel = getUnsignedFloatFromUser("amount to fuel");
+                }
+            }
+            while(!validAmount || !validFuel);
 
             printResult("Vehicle tank filled successfully", vehicleFound, licenseNumber);
         }
@@ -368,8 +412,25 @@ namespace Ex03.ConsoleUI
         {
             string licenseNumber = getValidLicenseNumber();
             float amountToCharge = getUnsignedFloatFromUser("amount to charge");
-            bool vehicleFound = r_Garage.ChargeVehicleByLicenseNumber(licenseNumber, amountToCharge);
-
+            bool vehicleFound = false, validAmount = false;
+            do
+            {
+                try
+                {
+                    vehicleFound = r_Garage.ChargeVehicleByLicenseNumber(licenseNumber, amountToCharge);
+                    validAmount = true;
+                }
+                catch(ValueOutOfRangeException outOfRangeException)
+                {
+                    validAmount = false;
+                    Console.WriteLine(outOfRangeException.Message);
+                    Console.WriteLine("Please try again");
+                    System.Threading.Thread.Sleep(3000);
+                    amountToCharge = getUnsignedFloatFromUser("amount to charge");
+                }
+            }
+            while(!validAmount);
+            
             printResult("Vehicle charged successfully", vehicleFound, licenseNumber);
         }
 
