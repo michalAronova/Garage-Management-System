@@ -419,7 +419,7 @@ namespace Ex03.ConsoleUI
         private void chargeVehicle()
         {
             string licenseNumber = getValidLicenseNumber();
-            float amountToCharge = getUnsignedFloatFromUser("amount to charge");
+            float amountToCharge = getUnsignedFloatFromUser("amount to charge (minutes)");
             bool vehicleFound = false, validAmount = false;
 
             do
@@ -435,7 +435,7 @@ namespace Ex03.ConsoleUI
                     Console.WriteLine(outOfRangeException.Message);
                     Console.WriteLine("Please try again");
                     System.Threading.Thread.Sleep(3000);
-                    amountToCharge = getUnsignedFloatFromUser("amount to charge");
+                    amountToCharge = getUnsignedFloatFromUser("amount to charge (minutes)");
                 }
             }
             while(!validAmount);

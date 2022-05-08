@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace Ex03.GarageLogic
+﻿namespace Ex03.GarageLogic
 {
     public class ElectricEngine : Engine
     {
@@ -8,7 +6,7 @@ namespace Ex03.GarageLogic
 
         public void Charge(float i_MinutesToCharge)
         {
-            base.FillEnergy(i_MinutesToCharge);
+            base.FillEnergy(i_MinutesToCharge/60);
         }
 
         public override eEngineType EngineType
