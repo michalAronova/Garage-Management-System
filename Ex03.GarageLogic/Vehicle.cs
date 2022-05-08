@@ -151,7 +151,8 @@ Model name: {1}
 Tires info:
 {2}
 Engine info:
-{3}", r_LicenseNumber, m_ModelName, tiresData, m_Engine.ToString());
+{3}
+Energy Percentage: {4}%", r_LicenseNumber, m_ModelName, tiresData, m_Engine.ToString(), (int)m_CurrentEnergyPercentage);
 
             return vehicleData;
         }

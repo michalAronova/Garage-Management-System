@@ -69,6 +69,7 @@ namespace Ex03.GarageLogic
         {
             string motorcycleData = string.Format(
 @"{0}
+Specific info:
 License type: {1}
 Engine capacity: {2}",
 base.ToString(),

@@ -24,7 +24,6 @@ namespace Ex03.GarageLogic
         {
             if (getMaxFillPossible() < i_EnergyToFill)
             {
-
                 throw new ValueOutOfRangeException(
                     string.Format("Request exceeds bound. Current amount of energy is {0}. Energy must be between {1} and {2}",
                     m_CurrentEnergy, k_MinEnergy, r_MaxEnergy), r_MaxEnergy, k_MinEnergy);

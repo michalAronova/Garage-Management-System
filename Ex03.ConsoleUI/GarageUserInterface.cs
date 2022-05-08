@@ -170,10 +170,9 @@ namespace Ex03.ConsoleUI
                 catch (Exception exception)
                 {
                     Console.WriteLine(exception.Message);
-                    Console.WriteLine("Press Enter to continue");
                 }
 
-                if((eServiceOption)serviceChoice != eServiceOption.ExitSystem)
+                if ((eServiceOption)serviceChoice != eServiceOption.ExitSystem)
                 {
                     Console.WriteLine("Press Enter to continue");
                     Console.ReadLine();
@@ -228,6 +227,7 @@ namespace Ex03.ConsoleUI
                 printResult("Vehicle status changed successfully", vehicleFound, licenseNumber);
             }
         }
+
         private void createAndEnterNewGarageVehicle(string i_LicenseNumber, VehicleCreator.eVehicleType i_VehicleType)
         {
             Vehicle newVehicle = createVehicleAndEnterParams(i_LicenseNumber, i_VehicleType);
@@ -245,6 +245,7 @@ namespace Ex03.ConsoleUI
             Vehicle newVehicle = r_VehicleCreator.CreateVehicle(i_LicenseNumber, i_VehicleType, out requiredParams);
             List<Object> enteredParams = getParamsFromUser(requiredParams);
             bool allValidParams = false;
+
             do
             {
                 try
@@ -269,7 +270,7 @@ namespace Ex03.ConsoleUI
 
         private List<Object> getParamsFromUser(List<Param> i_RequiredParams)
         {
-            String curr = null;
+            String currentParam = null;
             bool paramIsNotValid = true;
             List<Object> parameters = new List<Object>();
             Type type = null;
@@ -279,7 +280,7 @@ namespace Ex03.ConsoleUI
             foreach(Param parameter in i_RequiredParams)
             {
                 Console.WriteLine(string.Format("{0} ({1})", parameter.Name, parameter.Requirements));
-                curr = Console.ReadLine();
+                currentParam = Console.ReadLine();
                 type = parameter.Type;
                 parseMethod = parameter.Type == typeof(string) ? null : type.GetMethod("Parse", new Type[] { typeof(string) });
                 if (parseMethod != null) {
@@ -287,13 +288,13 @@ namespace Ex03.ConsoleUI
                     {
                         try
                         {
-                            parameters.Add(parseMethod.Invoke(null, new Object[] { curr }));
+                            parameters.Add(parseMethod.Invoke(null, new Object[] { currentParam }));
                             paramIsNotValid = !true;
                         }
                         catch (TargetInvocationException targetInvocationException)
                         {
                             Console.WriteLine("Invalid choice. Please try again");
-                            curr = Console.ReadLine();
+                            currentParam = Console.ReadLine();
                         }
                     }
 
@@ -301,7 +302,7 @@ namespace Ex03.ConsoleUI
                 }
                 else
                 {
-                    parameters.Add(curr);
+                    parameters.Add(currentParam);
                 }
             }
 
@@ -379,6 +380,7 @@ namespace Ex03.ConsoleUI
             FuelEngine.eFuelType fuelType = (FuelEngine.eFuelType)getUserChoice(Enum.GetValues(typeof(FuelEngine.eFuelType)), "fuel type");
             float amountToFuel = getUnsignedFloatFromUser("amount to fuel");
             bool vehicleFound = false, validAmount = false, validFuel = false;
+
             do
             {
                 try
@@ -393,6 +395,7 @@ namespace Ex03.ConsoleUI
                     {
                         throw new ArgumentException("Cannot refuel an electric engine!");
                     }
+
                     validFuel = false;
                     Console.WriteLine(argumentException.Message);
                     Console.WriteLine("Please try again");
@@ -418,6 +421,7 @@ namespace Ex03.ConsoleUI
             string licenseNumber = getValidLicenseNumber();
             float amountToCharge = getUnsignedFloatFromUser("amount to charge");
             bool vehicleFound = false, validAmount = false;
+
             do
             {
                 try

@@ -5,6 +5,8 @@ namespace Ex03.GarageLogic
 {
     public class FuelEngine : Engine
     {
+        private readonly eFuelType r_FuelType;
+        
         public enum eFuelType
         {
             Soler,
@@ -13,10 +15,7 @@ namespace Ex03.GarageLogic
             Octan98
         }
 
-        private readonly eFuelType r_FuelType;
-
-        public FuelEngine(eFuelType i_FuelType, float i_MaxEnergy)
-            : base(i_MaxEnergy)
+        public FuelEngine(eFuelType i_FuelType, float i_MaxEnergy) : base(i_MaxEnergy)
         {
             r_FuelType = i_FuelType;
         }

@@ -5,6 +5,7 @@
         public static void Main()
         {
             GarageUserInterface garageUserInterface = new GarageUserInterface();
+
             garageUserInterface.StartSystem();
         }
     }

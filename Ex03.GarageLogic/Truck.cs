@@ -32,10 +32,10 @@ namespace Ex03.GarageLogic
 
         public override void FillParams(List<object> i_Parameters)
         {
-            m_Refrigerating = (bool)i_Parameters[0];
             float cargoVolume = (float)i_Parameters[1];
-
-            if(cargoVolume < 0)
+            
+            m_Refrigerating = (bool)i_Parameters[0];
+            if (cargoVolume < 0)
             {
                 throw new ArgumentException("Cargo volume may not be negative");
             }
@@ -48,6 +48,7 @@ namespace Ex03.GarageLogic
         {
             string truckData = string.Format(
 @"{0}
+Specific info:
 Is refrigerating: {1}
 Volume of cargo: {2}",
 base.ToString(),

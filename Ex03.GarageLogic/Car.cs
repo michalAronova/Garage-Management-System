@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace Ex03.GarageLogic
 {
@@ -71,6 +70,7 @@ namespace Ex03.GarageLogic
         {
             string carData = string.Format(
 @"{0}
+Specific info:
 Car color: {1}
 Number of doors: {2}",
 base.ToString(),

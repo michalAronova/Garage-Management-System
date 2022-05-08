@@ -5,23 +5,23 @@ namespace Ex03.GarageLogic
 {
     public class Garage
     {
-        private readonly Dictionary<string, GarageVehicle> m_GarageVehicles = new Dictionary<string, GarageVehicle>();
+        private readonly Dictionary<string, GarageVehicle> r_GarageVehicles = new Dictionary<string, GarageVehicle>();
 
         public bool IsVehicleInGarage(string i_LicenseNumber)
         {
-            return m_GarageVehicles.ContainsKey(i_LicenseNumber);
+            return r_GarageVehicles.ContainsKey(i_LicenseNumber);
         }
 
         public void EnterNewVehicle(GarageVehicle i_NewGarageVehicle)
         {
-            m_GarageVehicles.Add(i_NewGarageVehicle.LicenseNumber, i_NewGarageVehicle);
+            r_GarageVehicles.Add(i_NewGarageVehicle.LicenseNumber, i_NewGarageVehicle);
         }
 
         public List<string> GetAllLicenseNumbers()
         {
             List<string> allLicenseNumbers = new List<string>();
 
-            foreach(KeyValuePair<string,GarageVehicle> garageVehiclePair in m_GarageVehicles)
+            foreach(KeyValuePair<string,GarageVehicle> garageVehiclePair in r_GarageVehicles)
             {
                 allLicenseNumbers.Add(garageVehiclePair.Key);
             }
@@ -33,7 +33,7 @@ namespace Ex03.GarageLogic
         {
             List<string> allLicenseNumbersByStatus = new List<string>();
 
-            foreach (KeyValuePair<string, GarageVehicle> garageVehiclePair in m_GarageVehicles)
+            foreach (KeyValuePair<string, GarageVehicle> garageVehiclePair in r_GarageVehicles)
             {
                 if(garageVehiclePair.Value.VehicleStatus == i_RequestedStatusFilter)
                 {
@@ -50,7 +50,7 @@ namespace Ex03.GarageLogic
 
             if(vehicleFound)
             {
-                m_GarageVehicles[i_LicenseNumber].VehicleStatus = i_SelectedVehicleStatus;
+                r_GarageVehicles[i_LicenseNumber].VehicleStatus = i_SelectedVehicleStatus;
             }
 
             return vehicleFound;
@@ -62,7 +62,7 @@ namespace Ex03.GarageLogic
 
             if(vehicleFound)
             {
-                m_GarageVehicles[i_LicenseNumber].Vehicle.InflateAllToMax();
+                r_GarageVehicles[i_LicenseNumber].Vehicle.InflateAllToMax();
             }
 
             return vehicleFound;
@@ -74,7 +74,7 @@ namespace Ex03.GarageLogic
 
             if(vehicleFound)
             {
-                m_GarageVehicles[i_LicenseNumber].Vehicle.RefuelVehicle(i_FuelType, i_FuelAmountToFill);
+                r_GarageVehicles[i_LicenseNumber].Vehicle.RefuelVehicle(i_FuelType, i_FuelAmountToFill);
             }
 
             return vehicleFound;
@@ -86,7 +86,7 @@ namespace Ex03.GarageLogic
 
             if(vehicleFound)
             {
-                m_GarageVehicles[i_LicenseNumber].Vehicle.ChargeVehicle(i_MinutesToCharge);
+                r_GarageVehicles[i_LicenseNumber].Vehicle.ChargeVehicle(i_MinutesToCharge);
             }
 
             return vehicleFound;
@@ -98,7 +98,7 @@ namespace Ex03.GarageLogic
 
             if (IsVehicleInGarage(i_LicenseNumber))
             {
-                fullData = m_GarageVehicles[i_LicenseNumber].ToString();
+                fullData = r_GarageVehicles[i_LicenseNumber].ToString();
             }
             else
             {
