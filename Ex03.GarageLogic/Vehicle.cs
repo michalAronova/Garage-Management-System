@@ -17,10 +17,10 @@ namespace Ex03.GarageLogic
         {
             r_LicenseNumber = i_LicenseNumber;
             r_Tires = new List<Tire>(new Tire[i_NumberOfTires]);
-            CreateTires(i_MaxAirPressure);
+            createTires(i_MaxAirPressure);
         }
 
-        private void CreateTires(float i_MaxAirPressure)
+        private void createTires(float i_MaxAirPressure)
         {
             for (int i = 0; i < r_Tires.Count; i++)
             {
@@ -40,7 +40,7 @@ namespace Ex03.GarageLogic
         {
             if (m_Engine is ElectricEngine)
             {
-                throw new ArgumentException("Cannot refuel an electric vehicle!");
+                throw new ArgumentException("IncorrectEngineType");
             }
 
             (m_Engine as FuelEngine).Refuel(i_FuelType, i_FuelAmount);

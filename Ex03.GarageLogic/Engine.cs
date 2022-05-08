@@ -7,7 +7,7 @@ namespace Ex03.GarageLogic
     {
         private const float k_MinEnergy = 0;
         private readonly float r_MaxEnergy;
-        private float m_currentEnergy = 0;
+        private float m_CurrentEnergy = 0;
 
         public enum eEngineType
         {
@@ -27,15 +27,15 @@ namespace Ex03.GarageLogic
 
                 throw new ValueOutOfRangeException(
                     string.Format("Request exceeds bound. Current amount of energy is {0}. Energy must be between {1} and {2}",
-                    m_currentEnergy, k_MinEnergy, r_MaxEnergy), r_MaxEnergy, k_MinEnergy);
+                    m_CurrentEnergy, k_MinEnergy, r_MaxEnergy), r_MaxEnergy, k_MinEnergy);
             }
 
-            m_currentEnergy += i_EnergyToFill;
+            m_CurrentEnergy += i_EnergyToFill;
         }
 
         private float getMaxFillPossible()
         {
-            return r_MaxEnergy - m_currentEnergy;
+            return r_MaxEnergy - m_CurrentEnergy;
         }
 
         public float MinEnergy
@@ -58,7 +58,7 @@ namespace Ex03.GarageLogic
         {
             get
             {
-                return m_currentEnergy;
+                return m_CurrentEnergy;
             }
             set
             {

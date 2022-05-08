@@ -256,8 +256,9 @@ namespace Ex03.ConsoleUI
                 {
                     allValidParams = false;
                     Console.WriteLine(exception.Message);
-                    Console.WriteLine("Please try again");
-                    System.Threading.Thread.Sleep(3000);
+                    Console.WriteLine("Please try again, press Enter to continue");
+                    Console.ReadLine();
+                    Console.Clear();
                     enteredParams = getParamsFromUser(requiredParams);
                 }
             }
@@ -291,7 +292,7 @@ namespace Ex03.ConsoleUI
                         }
                         catch (TargetInvocationException targetInvocationException)
                         {
-                            Console.WriteLine("Invalid {0}. Please try again", parameter.Name);
+                            Console.WriteLine("Invalid choice. Please try again");
                             curr = Console.ReadLine();
                         }
                     }
@@ -388,6 +389,10 @@ namespace Ex03.ConsoleUI
                 }
                 catch(ArgumentException argumentException)
                 {
+                    if(argumentException.Message == "IncorrectEngineType")
+                    {
+                        throw new ArgumentException("Cannot refuel an electric engine!");
+                    }
                     validFuel = false;
                     Console.WriteLine(argumentException.Message);
                     Console.WriteLine("Please try again");
