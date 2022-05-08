@@ -27,6 +27,11 @@
             m_CurrentAirPressure = newAirPressure;
         }
 
+        internal void InitAirPressureToZero()
+        {
+            m_CurrentAirPressure = 0;
+        }
+
         public void InflateToMax()
         {
             m_CurrentAirPressure = r_MaxAirPressure;

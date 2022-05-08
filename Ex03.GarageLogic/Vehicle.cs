@@ -73,6 +73,14 @@ namespace Ex03.GarageLogic
             }
         }
 
+        private void initAllTires()
+        {
+            foreach (Tire tire in r_Tires)
+            {
+                tire.InitAirPressureToZero();
+            }
+        }
+
         public virtual List<Param> GetParametersRequired()
         {
             List<Param> paramsRequired = new List<Param>();
@@ -121,9 +129,10 @@ namespace Ex03.GarageLogic
             float tirePressure = (float)i_Parameters[3];
 
             m_ModelName = i_Parameters[0] as string;
-            m_Engine.FillEnergy(energyInEngine);
+            m_Engine.SetEnergy(energyInEngine);
             updateEnergyPercentage();
             setManufacturerAllTires(manufacturerName);
+            initAllTires();
             InflateAllTires(tirePressure);
         }
 

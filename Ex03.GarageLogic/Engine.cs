@@ -29,6 +29,18 @@
             m_CurrentEnergy += i_EnergyToFill;
         }
 
+        internal void SetEnergy(float i_EnergyToSet)
+        {
+            if (r_MaxEnergy < i_EnergyToSet)
+            {
+                throw new ValueOutOfRangeException(
+                    string.Format("Request exceeds bound. Current amount of energy is {0}. Energy must be between {1} and {2}",
+                    m_CurrentEnergy, k_MinEnergy, r_MaxEnergy), r_MaxEnergy, k_MinEnergy);
+            }
+
+            m_CurrentEnergy = i_EnergyToSet;
+        }
+
         private float getMaxFillPossible()
         {
             return r_MaxEnergy - m_CurrentEnergy;

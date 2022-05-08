@@ -256,9 +256,9 @@ namespace Ex03.ConsoleUI
                 catch(Exception exception)
                 {
                     allValidParams = false;
-                    Console.WriteLine(exception.Message);
-                    Console.WriteLine("Please try again, press Enter to continue");
+                    Console.WriteLine("{0}{1}Please try again, press Enter to continue", exception.Message,Environment.NewLine);
                     Console.ReadLine();
+                    enteredParams.Clear();
                     Console.Clear();
                     enteredParams = getParamsFromUser(requiredParams);
                 }
