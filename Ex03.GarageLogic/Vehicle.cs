@@ -5,7 +5,6 @@ namespace Ex03.GarageLogic
 {
     public abstract class Vehicle
     {
-        private const int k_ParametersRequiredForFullCreation = 3;
         private readonly string r_LicenseNumber;
         private readonly List<Tire> r_Tires;
         private float m_CurrentEnergyPercentage = 0;
